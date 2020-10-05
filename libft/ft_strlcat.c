@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 21:32:08 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/02 22:04:49 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/05 19:31:24 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ size_t	ft_strlcat(char *restrict dst, const char *restrict src,
 		i++;
 	while (src[j] && i + j + 1 < dstsize)
 	{
-		dest[i + j] = src[j];
+		dst[i + j] = src[j];
 		j++;
 	}
-	dest[i + j] = 0;
+	dst[i + j] = 0;
 	while (src[j])
 		j++;
 	if (i > dstsize)

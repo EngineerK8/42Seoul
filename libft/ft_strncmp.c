@@ -6,16 +6,18 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 22:31:24 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/02 22:39:59 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/05 23:24:26 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int strncmp(const char *s1, const char *s2, size_t n)
+int		ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	int cnt;
+	size_t	cnt;
 
+	if (s1 == NULL && s2 == NULL)
+		return (0);
 	cnt = 0;
 	while ((s1[cnt] || s2[cnt]) && cnt < n)
 	{

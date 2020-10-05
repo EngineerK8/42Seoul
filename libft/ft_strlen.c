@@ -6,15 +6,15 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 20:50:19 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/02 20:52:08 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/05 17:50:00 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
-	size_t cnt;
+	size_t	cnt;
 
 	cnt = 0;
 	while (s[cnt])

@@ -6,16 +6,16 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 23:56:29 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/02 23:57:39 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/05 23:29:56 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	toupper(int c)
+int	ft_toupper(int c)
 {
 	if (c >= 'a' && c <= 'z')
-		return (c + 'a' - 'A');
+		return (c + 'A' - 'a');
 	else
 		return (c);
 }
