@@ -6,37 +6,52 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/04 22:37:53 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 19:15:57 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/06 23:57:55 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+int		to_find(char c, char const *set)
+{
+	int	cnt;
+	
+	cnt = 0;
+	while (set[cnt])
+	{
+		if (set[cnt] == c)
+			return (1);
+		cnt++;
+	}
+	return (0);
+}
+
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*str;
-	int		cnt;
-	int		cnt2;
+	int		start;
+	int		end;
+	int		len;
 
-	cnt = 0;
-	str = (char *)malloc(ft_strlen(s1) * sizeof(char) + 1);
-	while (s1[cnt])
+	end = ft_strlen(s1) - 1;
+	start = 0;
+	while (start < end)
 	{
-		cnt2 = 0;
-		if (s1[cnt] == set[cnt2])
-			while (set[cnt2])
-			{
-				if (s1[cnt + cnt2] != set[cnt2])
-					break ;
-				cnt2++;
-				if (set[cnt2] == 0)
-				{
-					ft_memcpy(str, s1, cnt);
-					ft_strjoin(str, s1 + ft_strlen(set));
-					cnt = -1;
-				}
-			}
-		cnt++;
+		if (to_find(s1[start], set) == 0)
+			break ;
+		start++;
 	}
+	while (end > 0)
+	{
+		if (to_find(s1[end], set) == 0)
+			break ;
+		end--;
+	}
+	len = end > start ? end - start + 1 : 0;
+	if (len <= 1)
+		return (ft_strdup(""));
+	if (!(str = calloc(sizeof(char), len + 1)))
+		return (NULL);
+	ft_strlcpy(str, s1 + start, len + 1);
 	return (str);
 }

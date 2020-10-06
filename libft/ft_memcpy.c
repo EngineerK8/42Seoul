@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 17:19:16 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 00:30:08 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 01:36:47 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	*ft_memcpy(void *restrict dst, const void *restrict src, size_t n)
 {
 	size_t	cnt;
 
-	if (dst == 0 || src == 0)
+	if (dst == 0 && src == 0)
 		return (dst);
 	cnt = 0;
 	while (cnt < n)

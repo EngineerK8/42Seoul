@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 19:47:11 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 22:50:00 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 01:41:52 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@ void	*ft_memccpy(void *restrict dst,
 	flag = 0;
 	while (cnt < n && !flag && usrc[cnt])
 	{
-		if (usrc[cnt] == c)
+		if (usrc[cnt] == (unsigned char)c)
 			flag = 1;
 		cnt++;
 	}
 	if (flag == 1)
 	{
-		ft_memcpy(dst, src, cnt);
+		ft_memcpy(dst, usrc, cnt);
 		return (dst + cnt);
 	}
 	else
 	{
-		ft_memcpy(dst, src, n);
+		ft_memcpy(dst, usrc, n);
 		return (0);
 	}
 }

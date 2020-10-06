@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/04 22:18:23 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 19:35:29 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 00:29:41 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,18 @@
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	int		cnt;
+	size_t	cnt;
 	char	*result;
 
 	cnt = 0;
-	while (s[cnt])
+	if(!(result = (char *)ft_calloc(len + 1, sizeof(char))))
+		return (NULL);
+	while ((cnt < len) && (cnt + start < ft_strlen(s)))
 	{
-		if ((unsigned char)(s[cnt]) == start)
-		{
-			result = (char *)ft_calloc(len + 1, sizeof(char));
-			ft_memcpy(result, s, len + 1);
-			return (result);
-		}
+		result[cnt] = s[cnt + start];
 		cnt++;
 	}
-	return (NULL);
+	result[cnt] = '\0';
+	return (result);
+
 }

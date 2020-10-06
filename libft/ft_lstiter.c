@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 20:56:28 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 21:25:18 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 01:35:02 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
+	if (lst == 0 || f == 0)
+		return ;
 	while (lst)
 	{
-		f(lst);
+		f(lst->content);
 		lst = lst->next;
 	}
 }
