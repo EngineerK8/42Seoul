@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:23:51 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/06 02:28:59 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 20:15:14 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ void	str_malloc_copy(char *s, char c, size_t num, char **res)
 	size_t	x;
 	size_t	i;
 	size_t	len;
+	size_t	cnt;
 
+	cnt = 0;
 	i = 0;
 	x = 0;
 	while (s[i] && x < num)
@@ -48,13 +50,15 @@ void	str_malloc_copy(char *s, char c, size_t num, char **res)
 		{
 			while (s[i + len] != c && s[i + len])
 				len++;
-			res[x] = ft_calloc(sizeof(char), len + 1);
-			if (res[x] == 0)
+			if (!(res[x] = ft_calloc(sizeof(char), len + 1)))
+			{
+				while (res[cnt])
+					free(res[cnt++]);
 				return ;
-			ft_strlcpy(res[x], s + i, len + 1);
-			x++;
+			}
+			ft_strlcpy(res[x++], s + i, len + 1);
 		}
-		i += 1 + len;
+		i += len + (len == 0 ? 1 : 0);
 	}
 }
 
@@ -69,7 +73,7 @@ char	**ft_split(char const *s, char c)
 	res = ft_calloc(sizeof(char *), num + 1);
 	if (res == 0)
 		return (0);
-	res[num] = 0;
 	str_malloc_copy((char *)s, c, num, res);
+	res[num] = 0;
 	return (res);
 }

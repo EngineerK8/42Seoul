@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:42:52 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/06 01:41:28 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 20:18:43 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_itoa(int n)
 		return (0);
 	str[len] = '\0';
 	value = n < 0 ? -(long)n : (long)n;
-	while (len >= 0)
+	while (len > 0)
 	{
 		str[len - 1] = value % 10 + '0';
 		value = value / 10;

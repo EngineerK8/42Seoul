@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/04 22:25:07 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 15:21:23 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 19:33:56 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		len2;
 	char	*str;
 
-	if (s1 == 0 && s2 == 0)
+	if (s1 == 0 || s2 == 0)
 		return (0);
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);

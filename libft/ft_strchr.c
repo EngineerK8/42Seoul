@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/02 22:05:16 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 22:53:05 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 19:25:18 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ char	*ft_strchr(const char *s, int c)
 {
 	int	cnt;
 
-	if (s == 0)
-		return (0);
 	if (c == 0)
 		return ((char *)s + ft_strlen(s));
 	cnt = 0;

@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 17:21:28 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/05 23:52:29 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 19:37:03 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	ft_putendl_fd(char *s, int fd)
 {
 	int cnt;
 
+	if (s == 0)
+		return ;
 	cnt = 0;
 	while (s[cnt])
 	{

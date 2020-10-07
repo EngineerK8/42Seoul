@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/04 22:37:53 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/06 23:57:55 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/07 19:34:50 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		to_find(char c, char const *set)
 {
 	int	cnt;
-	
+
 	cnt = 0;
 	while (set[cnt])
 	{
@@ -33,6 +33,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 	int		end;
 	int		len;
 
+	if (s1 == 0)
+		return (NULL);
 	end = ft_strlen(s1) - 1;
 	start = 0;
 	while (start < end)
@@ -41,16 +43,12 @@ char	*ft_strtrim(char const *s1, char const *set)
 			break ;
 		start++;
 	}
-	while (end > 0)
-	{
-		if (to_find(s1[end], set) == 0)
-			break ;
+	while (end > 0 && to_find(s1[end], set) != 0)
 		end--;
-	}
 	len = end > start ? end - start + 1 : 0;
 	if (len <= 1)
 		return (ft_strdup(""));
-	if (!(str = calloc(sizeof(char), len + 1)))
+	if (!(str = ft_calloc(sizeof(char), len + 1)))
 		return (NULL);
 	ft_strlcpy(str, s1 + start, len + 1);
 	return (str);
