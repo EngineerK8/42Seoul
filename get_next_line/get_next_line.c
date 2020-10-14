@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:11:50 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/13 23:31:48 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/14 20:56:34 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,23 @@
 #include <limits.h>
 
 #include "get_next_line.h"
-#define		BUFFER_SIZE	6
+#define		BUFFER_SIZE	40
 int	checknl(char *s)
 {
 	int	cnt;
 
 	cnt = 0;
+	if (s == 0)
+		return (-1);
 	while(s[cnt])
 	{
 		if (s[cnt] == '\n')
 			return (cnt);
 		cnt++;
 	}
-	return (0);
+	return (-1);
 }
 
-int	ft_strlen(char *s)
-{
-	int cnt;
-
-	cnt = 0;
-	while (s[cnt++])
-		;
-	return (cnt);
-}
 
 char	*ft_strjoin(char *dst, char *src, size_t n)
 {
@@ -54,10 +47,10 @@ char	*ft_strjoin(char *dst, char *src, size_t n)
 	cnt = 0;
 	cnt2 = 0;
 
-//	if (src == 0)
-//		return (0);
+	if (src == 0)
+		return (0);
 	dst_len = ft_strlen(dst);
-	src_len = checknl(src) > 0 ? checknl(src) : ft_strlen(src);
+	src_len = ft_strlen(src);
 	if (!(s = (char *)malloc((dst_len + src_len + 1) * sizeof(char))))
 		return (NULL);
 	while (dst[cnt2])
@@ -69,80 +62,43 @@ char	*ft_strjoin(char *dst, char *src, size_t n)
 	return (s);
 }
 
-void	ft_revjoin(char *backup, char *src, size_t n)
+int		get_next_line2(int fd, char **line)
 {
-	int		src_len;
-	char	*s;
-	int		cnt;
-
-	cnt = 0;
-	src_len = ft_strlen(src);
-	(backup = (char *)malloc((n + 1) * sizeof(char)));
-	while (cnt < n)
-	{
-		backup[cnt] = src[src_len - n + cnt + 1];
-		cnt++;
-	}
-}
-
-int		get_next_line(int fd, char **line)
-{
-	//OPEN_MAX fd 최대값
-	char		*buff;
-	ssize_t		rd_size;
 	static char	*backup[OPEN_MAX];
-	char		*temp;
+	ssize_t		rd_size;
+	char		buff[BUFFER_SIZE + 1];
+	int			idx;
 
-	printf("backup : %s\n", backup[fd]);
-	buff = (char *)malloc(BUFFER_SIZE * 256 * sizeof(char));
-	temp = (char *)malloc(BUFFER_SIZE * 256 * sizeof(char));
-	rd_size = read(fd, buff, BUFFER_SIZE);
-	temp = ft_strjoin(temp, buff, BUFFER_SIZE);
-//	printf("backup : %s\n", buff);
-	if (rd_size < BUFFER_SIZE)
-		return (0);
-	while (checknl(temp) == 0)
+	while ((rd_size = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
-		rd_size = read(fd, buff, BUFFER_SIZE);
-		temp = ft_strjoin(temp, buff, checknl(buff) == 0 ? rd_size : checknl(buff));
-//		printf("rd_size : %zd\n", rd_size);
-//		printf("checknl(buff) : %d\n", checknl(buff));
+		if (backup[fd] == NULL)
+			backup[fd] = ft_strdup(buff);
+		else
+		{
+			backup[fd] = ft_strjoin(backup[fd], buff, rd_size);
+			if ((idx = checknl(backup[fd])) != -1)
+				break ;
+		}
 	}
-	ft_revjoin(backup[fd], buff, BUFFER_SIZE - rd_size);
-//	printf("buff : %s\n", buff);
-//	printf("rd_size : %zd\n", rd_size);
-//	printf("chcknl(buff) : %d\n", checknl(buff));
-	printf("	revjoin : %s\n", backup[fd]);
-	backup[fd][ft_strlen(backup[fd]) - 1] = 0;
-	temp[ft_strlen(temp)-2] = 0;
-	line[fd] = temp;
+	backup[fd][idx] = 0;
+	if(!(*line = ft_strdup(backup[fd])))
+		return (-1);
+	backup[fd] = ft_strdup(backup[fd] + idx + 1);
+	if (rd_size == 0)
+		return (0); // EOF
 	return (1);
 }
 
 int	main()
 {
-	char	buff[BUFFER_SIZE];
-	char	buff2[BUFFER_SIZE];
 	int		fd;
-	char	**s;
-	int		cnt;
+	char	*s;
 
-	s = (char **)malloc(256 * sizeof(char *));
-	cnt = 0;
 	if (0 < (fd = open("./test", O_RDONLY)))
 	{
-		if(!(s[cnt] = (char *)malloc(4096 * sizeof(char*))))
-			return (0);
-		get_next_line(fd, s);
-		printf("%s\n", s[fd]);
-		get_next_line(fd, s);
-		printf("%s\n", s[fd]);
-		get_next_line(fd, s);
-		printf("%s\n", s[fd]);
-		get_next_line(fd, s);
-		printf("%s\n", s[fd]);
+		while (get_next_line2(fd, &s) != 0)
+			printf("%s\n", s);
 		close(fd);
-		cnt++;
 	}
 	else
 		printf("파일 열기에 실패했습니다. \n");
