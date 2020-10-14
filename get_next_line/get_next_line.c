@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:11:50 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/14 20:56:34 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/14 23:32:02 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		get_next_line2(int fd, char **line)
 {
 	static char	*backup[OPEN_MAX];
 	ssize_t		rd_size;
-	char		buff[BUFFER_SIZE + 1];
+	char		buff[BUFFER_SIZE+1];
 	int			idx;
 
 	while ((rd_size = read(fd, buff, BUFFER_SIZE)) > 0)
@@ -80,9 +80,12 @@ int		get_next_line2(int fd, char **line)
 				break ;
 		}
 	}
+	idx = checknl(backup[fd]);
 	backup[fd][idx] = 0;
 	if(!(*line = ft_strdup(backup[fd])))
 		return (-1);
+//	printf("backup[fd] : %s\n", backup[fd]);
+//	printf("idx : %d\n", idx);
 	backup[fd] = ft_strdup(backup[fd] + idx + 1);
 	if (rd_size == 0)
 		return (0); // EOF
