@@ -6,11 +6,17 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:11:50 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 09:41:47 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/15 09:36:05 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <limits.h>
+#include "get_next_line_bonus.h"
 
 int		checknl(char *s)
 {
@@ -72,4 +78,20 @@ int		get_next_line(int fd, char **line)
 	if (rd_size == 0)
 		return (0);
 	return (1);
+}
+
+int		main(void)
+{
+	int		fd;
+	char	*s;
+
+	if (0 < (fd = open("./test", O_RDONLY)))
+	{
+		while (get_next_line(fd, &s) != 0)
+			printf("%s\n", s);
+		close(fd);
+	}
+	else
+		printf("파일 열기에 실패했습니다. \n");
+	return (0);
 }

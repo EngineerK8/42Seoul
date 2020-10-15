@@ -6,12 +6,12 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:12:45 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 09:42:20 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/15 09:42:31 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 #include <stdlib.h>
 #include <limits.h>
