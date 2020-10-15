@@ -6,15 +6,14 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:11:50 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 17:08:02 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/15 21:15:54 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
 #include <stdio.h>
 
-#include <fcntl.h>
-#include <unistd.h>
 
 int		checknl(char *s)
 {
@@ -30,6 +29,16 @@ int		checknl(char *s)
 		cnt++;
 	}
 	return (-1);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	cnt;
+
+	cnt = 0;
+	while (s[cnt])
+		cnt++;
+	return (cnt);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -56,11 +65,71 @@ int		get_next_line(int fd, char **line)
 	ssize_t		rd_size;
 	char		buff[BUFFER_SIZE + 1];
 	int			idx;
+	char		*temp;
 
 	rd_size = 0;
 	if (fd < 0 || fd > OPEN_MAX || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
-	ft_bzero(buff, BUFFER_SIZE + 1);
+	ft_memset(buff, 0, BUFFER_SIZE + 1);
+	if ((idx = checknl(backup[fd])) == -1)
+		while ((rd_size = read(fd, buff, BUFFER_SIZE)) > 0)
+		{
+			if (backup[fd] == NULL)
+				temp = ft_strdup(buff);
+			else
+				temp = ft_strjoin(backup[fd], buff);
+			if (!temp)
+			{
+				if (backup[fd])
+					free(backup[fd]);
+				return (-1);
+			}
+			ft_memset(buff, 0, BUFFER_SIZE + 1);
+			free(backup[fd]);
+			backup[fd] = temp;
+			if ((idx = checknl(backup[fd])) != -1)
+				break ;
+		}
+	if (rd_size < 0)
+		return (-1);
+	if (!backup[fd])
+	{
+		if(!(*line = ft_strdup("")))
+			return (-1);
+		return (0);
+	}
+	
+	if (idx != -1)
+		backup[fd][idx] = 0;
+	if (!(*line = ft_strdup(backup[fd])))
+	{
+		if (backup[fd])
+			free(backup[fd]);
+		return (-1);
+	}
+	if (rd_size == 0 && idx == -1)
+	{
+		free(backup[fd]);
+		backup[fd] = 0;
+		return (0);
+	}
+	if (!(temp = ft_strdup(backup[fd] + idx + 1)))
+	{
+		if (backup[fd])
+			free(backup[fd]);
+		return (-1);
+	}
+	free(backup[fd]);
+	backup[fd] = temp;
+//		backup[fd] = ft_strdup(backup[fd] + idx + 1);
+	return (1);
+}
+
+/*
+	rd_size = 0;
+	if (fd < 0 || fd > OPEN_MAX || line == NULL || BUFFER_SIZE <= 0)
+		return (-1);
+	ft_memset(buff, 0, BUFFER_SIZE + 1);
 	if ((idx = checknl(backup[fd])) == -1)
 		while ((rd_size = read(fd, buff, BUFFER_SIZE)) > 0)
 		{
@@ -68,7 +137,7 @@ int		get_next_line(int fd, char **line)
 				backup[fd] = ft_strdup(buff);
 			else
 				backup[fd] = ft_strjoin(backup[fd], buff);
-			ft_bzero(buff, BUFFER_SIZE + 1);
+			ft_memset(buff, 0, BUFFER_SIZE + 1);
 			if ((idx = checknl(backup[fd])) != -1)
 				break ;
 		}
@@ -90,22 +159,4 @@ int		get_next_line(int fd, char **line)
 	else
 		backup[fd] = ft_strdup(backup[fd] + idx + 1);
 	return (1);
-}
-
-/*int     main(int argc, char **argv)
-  {
-      int     fd;
-      int     eof;
-      char    *s;
- 
-      if (0 < (fd = open(argv[1], O_RDONLY)))
-      {
-          while ((eof = get_next_line(fd, &s)) != 0)
-              printf("%s\n", s);
-		  printf("%s\n", s);
-          close(fd);
-      }
-      else
-          printf("파일 열기에 실패했습니다. \n");
-      return (0);
- }*/
+}*/

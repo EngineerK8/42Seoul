@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:12:27 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 10:45:59 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/15 21:07:23 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,10 @@ void	*ft_calloc(size_t count, size_t size)
 	void	*str;
 
 	str = (void *)malloc(count * size);
-	if (str == 0)
+	if (!str)
 		return (0);
 	ft_memset(str, 0, count * size);
 	return (str);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	cnt;
-
-	cnt = 0;
-	while (s[cnt])
-		cnt++;
-	return (cnt);
 }
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
@@ -63,11 +53,6 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-void	ft_bzero(void *s, size_t n)
-{
-	ft_memset(s, 0, n);
-}
-
 char	*ft_strdup(const char *s1)
 {
 	char	*str;
@@ -75,7 +60,7 @@ char	*ft_strdup(const char *s1)
 
 	len = ft_strlen(s1);
 	str = ft_calloc(len + 1, 1);
-	if (str == NULL)
+	if (!str)
 		return (NULL);
 	ft_memcpy(str, s1, len);
 	str[len] = 0;
