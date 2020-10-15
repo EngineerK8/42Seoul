@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:12:27 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 09:20:52 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/15 10:45:59 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 		cnt++;
 	}
 	return (dst);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	ft_memset(s, 0, n);
 }
 
 char	*ft_strdup(const char *s1)

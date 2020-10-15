@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:12:45 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 09:42:20 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/15 14:05:37 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include <stdlib.h>
 #include <limits.h>
-#include <fcntl.h>
 #include <unistd.h>
 
 #ifndef	BUFFER_SIZE
@@ -26,6 +25,10 @@ size_t	ft_strlen(const char *s);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 char	*ft_strdup(const char *s1);
 void	*ft_calloc(size_t count, size_t size);
+void	ft_bzero(void *s, size_t n);
+int		get_next_line(int fd, char **line);
+char	*ft_strjoin(char *s1, char *s2);
+int		checknl(char *s);
 
 
 #endif

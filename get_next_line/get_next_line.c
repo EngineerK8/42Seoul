@@ -6,11 +6,15 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:11:50 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 09:41:47 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/15 14:43:16 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
+
+#include <fcntl.h>
+#include <unistd.h>
 
 int		checknl(char *s)
 {
@@ -53,23 +57,43 @@ int		get_next_line(int fd, char **line)
 	char		buff[BUFFER_SIZE + 1];
 	int			idx;
 
+	ft_bzero(buff, BUFFER_SIZE + 1);
 	if ((idx = checknl(backup[fd])) == -1)
 		while ((rd_size = read(fd, buff, BUFFER_SIZE)) > 0)
 		{
 			if (backup[fd] == NULL)
 				backup[fd] = ft_strdup(buff);
 			else
-			{
 				backup[fd] = ft_strjoin(backup[fd], buff);
-				if ((idx = checknl(backup[fd])) != -1)
-					break ;
-			}
+			ft_bzero(buff, BUFFER_SIZE + 1);
+			if ((idx = checknl(backup[fd])) != -1)
+				break ;
 		}
+	if (backup[fd] == 0)
+		return (0);
 	backup[fd][idx] = 0;
 	if (!(*line = ft_strdup(backup[fd])))
 		return (-1);
 	backup[fd] = ft_strdup(backup[fd] + idx + 1);
-	if (rd_size == 0)
+	if (rd_size == 0 || backup[fd] != 0)
 		return (0);
 	return (1);
 }
+
+/*int     main(int argc, char **argv)
+  {
+      int     fd;
+      int     eof;
+      char    *s;
+ 
+      if (0 < (fd = open(argv[1], O_RDONLY)))
+      {
+          while ((eof = get_next_line(fd, &s)) != 0)
+              printf("%s\n", s);
+		  printf("%s\n", s);
+          close(fd);
+      }
+      else
+          printf("파일 열기에 실패했습니다. \n");
+      return (0);
+ }*/
