@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:11:50 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 14:43:16 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/15 17:08:02 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ int		get_next_line(int fd, char **line)
 	char		buff[BUFFER_SIZE + 1];
 	int			idx;
 
+	rd_size = 0;
+	if (fd < 0 || fd > OPEN_MAX || line == NULL || BUFFER_SIZE <= 0)
+		return (-1);
 	ft_bzero(buff, BUFFER_SIZE + 1);
 	if ((idx = checknl(backup[fd])) == -1)
 		while ((rd_size = read(fd, buff, BUFFER_SIZE)) > 0)
@@ -69,14 +72,23 @@ int		get_next_line(int fd, char **line)
 			if ((idx = checknl(backup[fd])) != -1)
 				break ;
 		}
+	if (rd_size < 0)
+		return (-1);
 	if (backup[fd] == 0)
+	{
+		*line = ft_strdup("");
 		return (0);
+	}
 	backup[fd][idx] = 0;
 	if (!(*line = ft_strdup(backup[fd])))
 		return (-1);
-	backup[fd] = ft_strdup(backup[fd] + idx + 1);
-	if (rd_size == 0 || backup[fd] != 0)
+	if (rd_size == 0 && idx == -1)
+	{
+		backup[fd] = 0;
 		return (0);
+	}
+	else
+		backup[fd] = ft_strdup(backup[fd] + idx + 1);
 	return (1);
 }
 

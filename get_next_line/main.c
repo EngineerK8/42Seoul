@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/08 19:12:45 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 09:42:31 by hekang           ###   ########.fr       */
+/*   Created: 2020/10/15 10:06:51 by hekang            #+#    #+#             */
+/*   Updated: 2020/10/15 17:08:09 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#ifndef GET_NEXT_LINE_BONUS_H
-# define GET_NEXT_LINE_BONUS_H
-
-#include <stdlib.h>
-#include <limits.h>
-#include <fcntl.h>
+#include <stdio.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include "get_next_line.h"
 
-#ifndef	BUFFER_SIZE
-# define BUFFER_SIZE 500
-#endif
+int		main()
+{
+	int		fd;
+	int		eof;
+	char	*s;
 
-size_t	ft_strlen(const char *s);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
-char	*ft_strdup(const char *s1);
-void	*ft_calloc(size_t count, size_t size);
-
-
-#endif
+	if (0 < (fd = open("./test", O_RDONLY)))
+	{
+		while ((eof = get_next_line(fd, &s)) != 0)
+		{
+			printf("%s\n", s);
+		}
+		close(fd);
+	}
+	else
+		printf("파일 열기에 실패했습니다. \n");
+	return (0);
+}
