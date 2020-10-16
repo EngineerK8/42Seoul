@@ -6,11 +6,14 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 19:11:50 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/16 17:28:04 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/16 10:49:05 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+#include <stdio.h>
+
 
 int		checknl(char *s)
 {
@@ -46,42 +49,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (str);
 }
 
-int		befree(char **str)
-{
-	if (*str)
-		free(*str);
-	return (-1);
-}
-
-int		return_all(char **backup, char **line, int rd_size, int idx)
-{
-	char	*temp;
-
-	if (rd_size < 0)
-		return (-1);
-	if (!*backup)
-	{
-		if (!(*line = ft_strdup("")))
-			return (-1);
-		return (0);
-	}
-	if (idx != -1)
-		(*backup)[idx] = 0;
-	if (!(*line = ft_strdup(*backup)))
-		return (befree(backup));
-	if (rd_size == 0 && idx == -1)
-	{
-		free(*backup);
-		*backup = 0;
-		return (0);
-	}
-	if (!(temp = ft_strdup(*backup + idx + 1)))
-		return (befree(backup));
-	free(*backup);
-	*backup = temp;
-	return (1);
-}
-
 int		get_next_line(int fd, char **line)
 {
 	static char	*backup[OPEN_MAX];
@@ -90,23 +57,60 @@ int		get_next_line(int fd, char **line)
 	int			idx;
 	char		*temp;
 
+	rd_size = 0;
 	if (fd < 0 || fd > OPEN_MAX || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
 	ft_memset(buff, 0, BUFFER_SIZE + 1);
-	while (((idx = checknl(backup[fd])) != -1) &&
-		((rd_size = read(fd, buff, BUFFER_SIZE)) > 0))
+	if ((idx = checknl(backup[fd])) == -1)
+		while ((rd_size = read(fd, buff, BUFFER_SIZE)) > 0)
+		{
+			if (backup[fd] == NULL)
+				temp = ft_strdup(buff);
+			else
+				temp = ft_strjoin(backup[fd], buff);
+			if (!temp)
+			{
+				if (backup[fd])
+					free(backup[fd]);
+				return (-1);
+			}
+			ft_memset(buff, 0, BUFFER_SIZE + 1);
+			free(backup[fd]);
+			backup[fd] = temp;
+			if ((idx = checknl(backup[fd])) != -1)
+				break ;
+		}
+	if (rd_size < 0)
+		return (-1);
+	if (!backup[fd])
 	{
-		if (backup[fd] == NULL)
-			temp = ft_strdup(buff);
-		else
-			temp = ft_strjoin(backup[fd], buff);
-		if (!temp)
-			return (befree(&backup[fd]));
-		ft_memset(buff, 0, BUFFER_SIZE + 1);
-		free(backup[fd]);
-		backup[fd] = temp;
-		if ((idx = checknl(backup[fd])) != -1)
-			break ;
+		if(!(*line = ft_strdup("")))
+			return (-1);
+		return (0);
 	}
-	return (return_all(&backup[fd], line, rd_size, idx));
+	if (idx != -1)
+		backup[fd][idx] = 0;
+	*line = ft_strdup(backup[fd]);
+/*	if (!(*line = ft_strdup(backup[fd])))
+	{
+		if (backup[fd])
+			free(backup[fd]);
+		return (-1);
+	}*/
+	if (rd_size == 0 && idx == -1)
+	{
+		free(backup[fd]);
+		backup[fd] = 0;
+		return (0);
+	}
+	temp = ft_strdup(backup[fd] + idx + 1);
+/*	if (!(temp = ft_strdup(backup[fd] + idx + 1)))
+	{
+		if (backup[fd])
+			free(backup[fd]);
+		return (-1);
+	}*/
+	free(backup[fd]);
+	backup[fd] = temp;
+	return (1);
 }

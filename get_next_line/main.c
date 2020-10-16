@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 10:06:51 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/15 17:08:09 by hekang           ###   ########.fr       */
+/*   Updated: 2020/10/16 14:15:25 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -24,7 +24,7 @@ int		main()
 	{
 		while ((eof = get_next_line(fd, &s)) != 0)
 		{
-			printf("%s\n", s);
+			printf("gnl : %s\n", s);
 		}
 		close(fd);
 	}
