@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/08 19:12:27 by hekang            #+#    #+#             */
-/*   Updated: 2020/10/19 08:38:25 by hekang           ###   ########.fr       */
+/*   Created: 2020/10/19 09:10:35 by hekang            #+#    #+#             */
+/*   Updated: 2020/10/19 10:37:35 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*ft_memset(void *b, int c, size_t len)
 {
