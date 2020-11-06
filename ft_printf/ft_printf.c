@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 16:56:36 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/04 16:27:16 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/06 17:37:15 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,22 @@ int	initdata(t_data d)
 	return (1);
 }
 
-/*int	checkflag() // -, 0, . *
+
+int	checkflag(char *str, int i) // -, 0, . *
 {
-	checkminus();
-	checkzero();
-	checkprecision();
+	int j;
+
+	j = 0;
+	if (str[j] == '-')
+		is_minus = 1;
+
+	checkminus();	//left align
+	checkzero();	//왼쪽에 0
+	checkprecision();	
 	return (0);
 }
 
-*/
+
 
 int	ft_printf(const char *types, ...)
 {
@@ -50,6 +57,8 @@ int	ft_printf(const char *types, ...)
 	{
 		if (types[i + 1] &&types[i] == '%')
 		{
+			i = checkflag(&types[i], i);
+
 			if (types[i + 1] == 'd')
 				ft_putnbr(va_arg(tdata.valist, int));
 			if (types[i + 1] == 'c')
@@ -73,7 +82,6 @@ int	ft_printf(const char *types, ...)
 	va_end(tdata.valist);
 	return (0);
 }
-
 
 int main()
 {
