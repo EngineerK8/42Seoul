@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 12:56:09 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/03 16:06:47 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/10 17:44:34 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ void	ft_puthexa(int un, int c)
 
 void	ft_printpointer(long long p)
 {
-	if (p > 0)
+	if (p == 0)
+		write(1, "0", 1);
+	else if (p > 0)
 	{
 		ft_printpointer(p / 16);
 		write(1, &"0123456789abcdef"[p % 16], 1);
@@ -90,60 +92,4 @@ void	ft_putunbr(int un)
 	if (n >= 10)
 		ft_putunbr(n / 10);
 	ft_putchar(n % 10 + '0');
-}
-
-int	check_digit(const char *str)
-{
-	int	cnt;
-	int	i;
-	int	minus;
-
-	cnt = 0;
-	i = 0;
-	minus = 1;
-	while (str[cnt] == ' ' || str[cnt] == '\t' || str[cnt] == '\n' ||
-			str[cnt] == '\v' || str[cnt] == '\f' || str[cnt] == '\r')
-		cnt++;
-	if (str[cnt] == '+' || str[cnt] == '-')
-	{
-		if (str[cnt] == '-')
-			minus = -1;
-		cnt++;
-	}
-	while (str[cnt + i])
-	{
-		if (str[cnt + i] >= '0' && str[cnt + i] <= '9')
-			i++;
-		else
-			break ;
-	}
-	return (i * minus);
-}
-
-int	ft_atoi(const char *str)
-{
-	int					cnt;
-	unsigned long int	result;
-	int					minus;
-
-	if (check_digit(str) >= 20 || check_digit(str) <= -20)
-		return (check_digit(str) > 0 ? -1 : 0);
-	cnt = 0;
-	minus = 1;
-	result = 0;
-	while (str[cnt] == ' ' || str[cnt] == '\t' || str[cnt] == '\n' ||
-			str[cnt] == '\v' || str[cnt] == '\f' || str[cnt] == '\r')
-		cnt++;
-	if (str[cnt] == '+' || str[cnt] == '-')
-	{
-		if (str[cnt] == '-')
-			minus = -1;
-		cnt++;
-	}
-	while (str[cnt] >= '0' && str[cnt] <= '9')
-	{
-		result = result * 10 + str[cnt] - '0';
-		cnt++;
-	}
-	return (result * minus);
 }
