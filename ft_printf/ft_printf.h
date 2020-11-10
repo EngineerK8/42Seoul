@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 13:00:03 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/10 15:53:49 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/10 18:16:27 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 
 typedef	struct	s_dataopt
 {

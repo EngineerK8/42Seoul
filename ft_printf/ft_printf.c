@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 16:56:36 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/10 17:45:19 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/10 18:12:59 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,12 +332,9 @@ int ft_print_u(t_dataopt *dopt, int n)
 
 int	ft_printf(const char *types, ...)
 {
-//	t_data	*data;
 	char		*str;
 	t_dataopt	dataopt;
 	int			i;
-	
-//	initdata(data);
 
 	i = 0;
 	va_start(dataopt.valist, types);
@@ -345,7 +342,6 @@ int	ft_printf(const char *types, ...)
 	while (*str)
 	{
 		initdata(&dataopt);
-//			printf("isrightcont : %d\n", isrightcont(str));
 		if (*(str + 1) && *str == '%' && isrightcont(str))
 		{
 			str++;
@@ -369,7 +365,6 @@ int	ft_printf(const char *types, ...)
 				ft_print_p(&dataopt, (long long)va_arg(dataopt.valist, void *));
 			if (*str == 'u')
 				ft_print_u(&dataopt, va_arg(dataopt.valist, int));
-//			str++;			
 		}
 		else
 			write(1, str, 1);
@@ -379,91 +374,3 @@ int	ft_printf(const char *types, ...)
 	return (0);
 }
 
-int main()
-{
-	int a;
-	int b;
-
-	a = 0;
-	ft_printf("123 %d\nabc %c%s\na %c%----d\n", 123, 'a',"abc", 'a', 13);
-//	ft_printf("%X, %x \n", -1, 123);
-//	ft_printf("pointer : %p\n", &a);
-	printf("pointer : %p\n", NULL);
-	
-	ft_printf("pointer : %p\n", NULL);
-	
-//	ft_printf("d: %d\n", -1);
-//	ft_printf("u: %u\n", -1);
-
-//	printf("u: %u\n", -1);
-
-//	printf("%06d\n", 1);
-//	printf("%0.00005d\n", 1);
-	printf("%0*00*0*0-000--00000000-****5d\n", 1);
-//	printf("%-.5d\n", 1);
-	printf("%0010.2d\n", 1);
-	ft_printf("%0010.2d\n", 1);
-	printf("%-5d\n", 1);
-/*
-	printf("%-5d\n", 1);
-	printf("%5d\n", 1);
-	printf("%06d\n", 1);
-	printf("%-.01f\n", 1.12);
-
-	printf("%x\n", 123);
-	ft_puthexa(123, 1);
-	ft_puthexa(123, 2);
-*/
-
-//	printf("%u\n", -1);
-//	printf("%i\n", -1);
-//	printf("%d\n", -1);
-	return (0);
-}
-
-/*
-void printValues(char *types, ...)    // 가변 인자의 자료형을 받음, ...로 가변 인자 설정
-{
-    va_list ap;    // 가변 인자 목록
-    int i = 0;
-
-    va_start(ap, types);        // types 문자열에서 문자 개수를 구해서 가변 인자 포인터 설정
-    while (types[i] != '\0')    // 가변 인자 자료형이 없을 때까지 반복
-    {
-        switch (types[i])       // 가변 인자 자료형으로 분기
-        {
-        case 'i':                                // int형일 때
-            printf("%d ", va_arg(ap, int));      // int 크기만큼 값을 가져옴
-                                                 // ap를 int 크기만큼 순방향으로 이동
-            break;
-        case 'd':                                // double형일 때
-            printf("%f ", va_arg(ap, double));   // double 크기만큼 값을 가져옴
-                                                 // ap를 double 크기만큼 순방향으로 이동
-            break;
-        case 'c':                                // char형 문자일 때
-            printf("%c ", va_arg(ap, int));     // char 크기만큼 값을 가져옴
-                                                 // ap를 char 크기만큼 순방향으로 이동
-            break;
-        case 's':                                // char *형 문자열일 때
-            printf("%s ", va_arg(ap, char *));   // char * 크기만큼 값을 가져옴
-                                                 // ap를 char * 크기만큼 순방향으로 이동
-            break;
-        default:
-            break;
-        }
-        i++;
-    }
-    va_end(ap);    // 가변 인자 포인터를 NULL로 초기화
-
-    printf("\n");    // 줄바꿈
-}
-
-int main()
-{
-    printValues("i", 10);                                       // 정수
-    printValues("ci", 'a', 10);                                 // 문자, 정수
-    printValues("dci", 1.234567, 'a', 10);                      // 실수, 문자, 정수
-    printValues("sicd", "Hello, world!", 10, 'a', 1.234567);    // 문자열, 정수, 문자, 실수
-
-    return 0;
-}*/
