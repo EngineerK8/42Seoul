@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 16:56:36 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/10 18:12:59 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/11 18:46:49 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	initdata(t_dataopt *dataopt)
 int	isparam(char c)
 {
 	if (c == 'd' || c == 'c' || c == 's' || c == 'X' ||
-			c == 'X' || c == 'p' || c == 'u')
+			c == 'x' || c == 'p' || c == 'u')
 		return (1);
 	return (0);
 }
@@ -131,6 +131,13 @@ int	ft_nbrlen(int n)
 	int len;
 
 	len = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+	{
+		n = -n;
+		len++;
+	}
 	while (n > 0)
 	{
 		n = n / 10;
@@ -144,6 +151,13 @@ int	ft_nbrhexalen(int n)
 	int len;
 
 	len = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+	{
+		n = -n;
+		len++;
+	}
 	while (n > 0)
 	{
 		n = n / 16;
@@ -161,67 +175,57 @@ void inputpad(char cpad, int n)
 	}
 }
 
-void	 print_with_padding_d(t_dataopt *dopt, int n, int wid)
-{
-	if (dopt->isleft)
-	{
-		ft_putnbr(n);
-		inputpad(' ', dopt->dwidth - wid);
-	}
-	else if (dopt->dwidth > wid)
-	{
-		inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
-		if (dopt->preci > wid)
-			inputpad('0', dopt->preci - wid);
-		ft_putnbr(n);
-	}
-	else
-		ft_putnbr(n);
-	printf("\ndopt->dwidth : %d\n", dopt->dwidth);
-	printf("\ndopt->preci : %d\n", dopt->preci);
-	printf("\nwidth : %d\n", wid);
-}
-
-void	 print_with_padding_c(t_dataopt *dopt, int n, int wid)
-{
-	if (dopt->isleft)
-	{
-		ft_putchar(n);
-		inputpad(' ', dopt->dwidth - wid);
-	}
-	else if (dopt->dwidth > wid)
-	{
-		inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
-		if (dopt->preci > wid)
-			inputpad('0', dopt->preci - wid);
-		ft_putchar(n);
-	}
-	else
-		ft_putchar(n);
-	printf("\ndopt->dwidth : %d\n", dopt->dwidth);
-	printf("\ndopt->preci : %d\n", dopt->preci);
-	printf("\nwidth : %d\n", wid);
-}
 
 int ft_print_d(t_dataopt *dopt, int n)
 {
 	int wid;
+	int	czero;
+	int	lspace;
+	int	rspace;
 
 	wid = ft_nbrlen(n);
+	czero = (dopt->preci > wid) ? dopt->preci - wid : 0;
+
+
+
 	if (dopt->isleft)
 	{
+		if (n < 0 && (dopt->iszero || dopt->preci > wid))
+		{
+			write(1, "-", 1);
+			n = -n;
+			dopt->preci++;
+		}
+		if (dopt->preci > wid)
+			inputpad('0', dopt->preci - wid);
 		ft_putnbr(n);
-		inputpad(' ', dopt->dwidth - wid);
-	}
-	else if (dopt->dwidth > wid)
-	{
 		inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
+	}
+	else
+	{
+		if (n < 0 && dopt->preci > wid)
+			dopt->preci++;
+		if (!dopt->iszero)
+			inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
+		if (n < 0 && (dopt->iszero || dopt->preci > wid))
+		{
+			write(1, "-", 1);
+			n = -n;
+		}	
+		if (dopt->iszero)
+		{
+			if (dopt->preci && dopt->dwidth > dopt->preci)
+			{
+				inputpad(' ', dopt->dwidth - dopt->preci);
+				inputpad('0', dopt->preci > wid ? dopt->preci : wid);
+			}
+			else
+				inputpad('0', dopt->preci > wid ? dopt->preci : wid);
+		}
 		if (dopt->preci > wid)
 			inputpad('0', dopt->preci - wid);
 		ft_putnbr(n);
 	}
-	else
-		ft_putnbr(n);
 	return (1);
 }
 
@@ -258,6 +262,7 @@ int ft_print_s(t_dataopt *dopt, char *s)
 	else if (dopt->dwidth > (dopt->preci < wid ? dopt->preci : wid))
 	{
 		inputpad(' ', dopt->dwidth - wid);
+		s[dopt->preci] = 0;
 		ft_putstr(s);
 	}
 	else
@@ -348,9 +353,6 @@ int	ft_printf(const char *types, ...)
 			checkflag(&str, &dataopt);
 			checkwidth(&str, &dataopt);
 			checkprecision(&str, &dataopt);
-
-
-			
 			if (*str == 'd' || *str == 'i')
 				ft_print_d(&dataopt, va_arg(dataopt.valist, int));
 			if (*str == 'c')

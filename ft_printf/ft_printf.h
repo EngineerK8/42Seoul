@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 13:00:03 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/10 18:16:27 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/11 18:46:47 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	ft_putnbr(int n);
 void	ft_putunbr(int un);
 void	ft_putpointer(long long ull);
 int		check_digit(const char *str);
+int		ft_printf(const char *types, ...);
 //int		ft_atoi(const char *str);
 
 #endif
