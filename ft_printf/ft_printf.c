@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 16:56:36 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/11 18:46:49 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/16 18:49:05 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ int	isrightcont(char *str)
 		str++;
 	while (ft_isdigit(*str))
 		str++;
+	while ((*str) == '-')
+		str++;
 	if (ispoint(*str))
 		str++;
 	while (ft_isdigit(*str))
@@ -178,16 +180,45 @@ void inputpad(char cpad, int n)
 
 int ft_print_d(t_dataopt *dopt, int n)
 {
-	int wid;
+	int nwid;
 	int	czero;
 	int	lspace;
 	int	rspace;
-
-	wid = ft_nbrlen(n);
-	czero = (dopt->preci > wid) ? dopt->preci - wid : 0;
+	int	fminus;
 
 
+	nwid = ft_nbrlen(n);
+	if (dopt->isleft)
+	{
+		fminus = (n < 0) ? 1 : 0;
+		czero = (dopt->preci > nwid) ? dopt->preci - nwid + fminus : 0;
 
+		
+		rspace = (dopt->dwidth > dopt->preci) ? dopt->dwidth -
+			(dopt->preci > nwid ? dopt->preci : nwid) : 0;
+		lspace = 0;
+		n = n < 0 ? -n : n;
+	}
+	else
+	{
+		fminus = 0;
+		if (!dopt->iszero)
+			czero = dopt->preci - nwid;
+		else
+			czero = dopt->dwidth - nwid;
+
+		lspace = dopt->dwidth - nwid;
+		rspace = 0;
+	}
+		
+	inputpad('-', fminus);
+	inputpad(' ', lspace);
+	inputpad('0', czero);
+	ft_putnbr(n);
+	inputpad(' ', rspace);
+
+
+/*
 	if (dopt->isleft)
 	{
 		if (n < 0 && (dopt->iszero || dopt->preci > wid))
@@ -217,15 +248,15 @@ int ft_print_d(t_dataopt *dopt, int n)
 			if (dopt->preci && dopt->dwidth > dopt->preci)
 			{
 				inputpad(' ', dopt->dwidth - dopt->preci);
-				inputpad('0', dopt->preci > wid ? dopt->preci : wid);
+				inputpad('0', dopt->preci > wid ? dopt->preci - wid : dopt->dwidth - wid);
 			}
 			else
-				inputpad('0', dopt->preci > wid ? dopt->preci : wid);
+				inputpad('0', dopt->preci > wid ? dopt->preci - wid : dopt->dwidth - wid);
 		}
 		if (dopt->preci > wid)
 			inputpad('0', dopt->preci - wid);
 		ft_putnbr(n);
-	}
+	}*/
 	return (1);
 }
 
