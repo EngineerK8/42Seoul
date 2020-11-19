@@ -24,6 +24,7 @@ all : $(NAME)
 
 clean :
 	$(RM) $(OBJS)
+	$(MAKE) -C clean
 
 fclean : clean
 	$(RM) $(NAME)

@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 13:00:03 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/11 18:46:47 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/19 19:57:35 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ typedef	struct	s_dataopt
 	int		isleft;
 	int		iszero;
 	int		preci;
+	int		ispoint;
 	va_list	valist;
 }				t_dataopt;
 
-void	ft_puthexa(int n, int c);
+void	ft_puthexa(unsigned int n, int c, int zero);
 void	ft_putstr(char *s);
+void	ft_putnstr(char *s, int c);
 void	ft_putchar(char c);
 void	ft_putnbr(int n);
 void	ft_putunbr(int un);

@@ -6,34 +6,36 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 12:56:09 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/10 17:44:34 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/19 21:00:03 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_puthexa(int un, int c)
+void	ft_puthexa(unsigned int un, int c, int iszero)
 {
-	unsigned int	n;
-
-	n = un;
-	if (n > 0)
+	if (un == 0 && iszero == 0)
 	{
-		ft_puthexa(n / 16, c);
+		write(1, "0", 1);
+		return ;
+	}
+	if (un > 0)
+	{
+		ft_puthexa(un / 16, c, iszero);
 		if (c == 1)
-			write(1, &"0123456789ABCDEF"[n % 16], 1);
+			write(1, &"0123456789ABCDEF"[un % 16], 1);
 		else
-			write(1, &"0123456789abcdef"[n % 16], 1);
+			write(1, &"0123456789abcdef"[un % 16], 1);
 	}
 }
 
-void	ft_printpointer(long long p)
+void	ft_printpointer(long long p, long long pp)
 {
-	if (p == 0)
+	if (p == 0 && pp == 0)
 		write(1, "0", 1);
-	else if (p > 0)
+	if (p > 0)
 	{
-		ft_printpointer(p / 16);
+		ft_printpointer(p / 16, pp);
 		write(1, &"0123456789abcdef"[p % 16], 1);
 	}
 }
@@ -46,7 +48,7 @@ void	ft_putchar(char c)
 void	ft_putpointer(long long ll)
 {
 	ft_putstr("0x");
-	ft_printpointer(ll);
+	ft_printpointer(ll, ll);
 }
 
 void	ft_putstr(char *s)
@@ -63,16 +65,28 @@ void	ft_putstr(char *s)
 	}
 }
 
+void	ft_putnstr(char *s, int c)
+{
+	int	cnt;
+
+	if (s == 0)
+		return ;
+	cnt = 0;
+	while (cnt < c)
+	{
+		write(1, &s[cnt], 1);
+		cnt++;
+	}
+}
 void	ft_putnbr(int n)
 {
 	if (n == -2147483648)
 	{
-		ft_putnbr(-214748364);
+		ft_putnbr(214748364);
 		ft_putchar('8');
 	}
 	else if (n < 0)
 	{
-		ft_putchar('-');
 		ft_putnbr(-n);
 	}
 	else

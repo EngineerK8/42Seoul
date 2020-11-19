@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 16:56:36 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/16 18:49:05 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/19 20:58:26 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@ int	initdata(t_dataopt *dataopt)
 	dataopt->isleft = 0;
 	dataopt->iszero = 0;
 	dataopt->preci = 0;
+	dataopt->ispoint = 0;	
 	return (1);
 }
 
 int	isparam(char c)
 {
-	if (c == 'd' || c == 'c' || c == 's' || c == 'X' ||
-			c == 'x' || c == 'p' || c == 'u')
+	if (c == 'd' || c == 'i' || c == 'c' || c == 's' || c == 'X' ||
+			c == 'x' || c == 'p' || c == 'u' || c == '%')
 		return (1);
 	return (0);
 }
@@ -45,10 +46,13 @@ int	iszero(char s)
 	return (0);
 }
 
-int	ispoint(char c)
+int	ispoint(char c, t_dataopt *dataopt)
 {
 	if (c == '.')
+	{
+		dataopt->ispoint = 1;
 		return (1);
+	}
 	return (0);
 }
 
@@ -83,6 +87,12 @@ void	checkwidth(char **str, t_dataopt *dataopt)
 	while (isstar(**str))
 	{
 		dataopt->dwidth = va_arg(dataopt->valist, int);
+		if (dataopt->dwidth < 0)
+		{
+			dataopt->isleft = 1;
+			dataopt->iszero = 0;
+			dataopt->dwidth = -dataopt->dwidth;
+		}
 		(*str)++;
 		bstar = 1;
 	}
@@ -98,32 +108,44 @@ void	checkwidth(char **str, t_dataopt *dataopt)
 
 void	checkprecision(char **str, t_dataopt *dataopt)
 {
-	if (!ispoint(**str))
+	int	bstar;
+
+	bstar = 0;
+	if (!ispoint(**str, &*dataopt))
 		return ;
 	(*str)++;
+	while (isstar(**str))
+	{
+		dataopt->preci = va_arg(dataopt->valist, int);
+		(*str)++;
+		bstar = 1;
+	}
 	while (ft_isdigit(**str))
 	{
+		if (bstar == 1)
+			dataopt->preci = 0;
+		bstar = 0;
 		dataopt->preci = dataopt->preci * 10 + **str - '0';
 		(*str)++;
 	}
 }
 
 
-int	isrightcont(char *str)
+int	isrightcont(char *str, t_dataopt *dataopt)
 {
 	if (*str == '%')
 		str++;
+	while ((*str) == '-' || *str == '0')
+		str++;
+	while (ft_isdigit(*str) || *str == '*')
+		str++;
 	while ((*str) == '-')
 		str++;
-	while (ft_isdigit(*str))
+	if (ispoint(*str, &*dataopt))
 		str++;
-	while ((*str) == '-')
+	while (ft_isdigit(*str) || *str == '*')
 		str++;
-	if (ispoint(*str))
-		str++;
-	while (ft_isdigit(*str))
-		str++;
-	while (isparam(*str))
+	if (isparam(*str))
 		return (1);
 	return (0);
 }
@@ -148,7 +170,7 @@ int	ft_nbrlen(int n)
 	return (len);
 }
 
-int	ft_nbrhexalen(int n)
+int	ft_nbrhexalen(long long  n)
 {
 	int len;
 
@@ -185,78 +207,50 @@ int ft_print_d(t_dataopt *dopt, int n)
 	int	lspace;
 	int	rspace;
 	int	fminus;
-
-
+	int	mminus;
+	
+	mminus = 0;
 	nwid = ft_nbrlen(n);
 	if (dopt->isleft)
 	{
 		fminus = (n < 0) ? 1 : 0;
-		czero = (dopt->preci > nwid) ? dopt->preci - nwid + fminus : 0;
-
-		
+		if (dopt->iszero && !dopt->preci )
+			czero = dopt->dwidth - nwid + fminus;
+		else
+			czero = dopt->preci - nwid + fminus;
 		rspace = (dopt->dwidth > dopt->preci) ? dopt->dwidth -
-			(dopt->preci > nwid ? dopt->preci : nwid) : 0;
+			(dopt->preci > nwid ? dopt->preci + fminus : nwid) : 0;
 		lspace = 0;
 		n = n < 0 ? -n : n;
 	}
 	else
 	{
-		fminus = 0;
-		if (!dopt->iszero)
-			czero = dopt->preci - nwid;
-		else
+		if (n < 0)
+		{
+			n = -n;
+			mminus = 1;
+			if(dopt->preci)
+				dopt->preci++;
+		}
+			fminus = 0;
+		if (dopt->iszero && !dopt->preci)
 			czero = dopt->dwidth - nwid;
-
-		lspace = dopt->dwidth - nwid;
+		else
+			czero = dopt->preci - nwid;
+		if (czero < 0)
+			czero = 0;
+		lspace = (dopt->dwidth > czero + nwid) ? dopt->dwidth - nwid - czero : 0;
 		rspace = 0;
 	}
-		
 	inputpad('-', fminus);
 	inputpad(' ', lspace);
+	inputpad('-', mminus);
 	inputpad('0', czero);
-	ft_putnbr(n);
+	if (!(dopt->ispoint && !dopt->preci))
+		ft_putnbr(n);
+	else if (dopt->dwidth)
+		inputpad(' ', 1);
 	inputpad(' ', rspace);
-
-
-/*
-	if (dopt->isleft)
-	{
-		if (n < 0 && (dopt->iszero || dopt->preci > wid))
-		{
-			write(1, "-", 1);
-			n = -n;
-			dopt->preci++;
-		}
-		if (dopt->preci > wid)
-			inputpad('0', dopt->preci - wid);
-		ft_putnbr(n);
-		inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
-	}
-	else
-	{
-		if (n < 0 && dopt->preci > wid)
-			dopt->preci++;
-		if (!dopt->iszero)
-			inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
-		if (n < 0 && (dopt->iszero || dopt->preci > wid))
-		{
-			write(1, "-", 1);
-			n = -n;
-		}	
-		if (dopt->iszero)
-		{
-			if (dopt->preci && dopt->dwidth > dopt->preci)
-			{
-				inputpad(' ', dopt->dwidth - dopt->preci);
-				inputpad('0', dopt->preci > wid ? dopt->preci - wid : dopt->dwidth - wid);
-			}
-			else
-				inputpad('0', dopt->preci > wid ? dopt->preci - wid : dopt->dwidth - wid);
-		}
-		if (dopt->preci > wid)
-			inputpad('0', dopt->preci - wid);
-		ft_putnbr(n);
-	}*/
 	return (1);
 }
 
@@ -284,86 +278,215 @@ int ft_print_s(t_dataopt *dopt, char *s)
 {
 	int wid;
 
+	if (!s)
+		s = "(null)";
 	wid = ft_strlen(s);
+	if (dopt->preci > 0)
+		wid = (dopt->preci > wid) ? wid : dopt->preci;
+	if (dopt->ispoint && !dopt->preci)
+	{
+		inputpad(' ', dopt->dwidth);
+		return(1);
+	}
 	if (dopt->isleft)
 	{
-		ft_putstr(s);
+		ft_putnstr(s, wid);
 		inputpad(' ', dopt->dwidth - wid);
-	}
-	else if (dopt->dwidth > (dopt->preci < wid ? dopt->preci : wid))
-	{
-		inputpad(' ', dopt->dwidth - wid);
-		s[dopt->preci] = 0;
-		ft_putstr(s);
 	}
 	else
-		ft_putstr(s);
+	{
+		inputpad(' ', dopt->dwidth - wid);
+		ft_putnstr(s, wid);
+	}
 	return (1);
 }
 
-int	ft_print_x(t_dataopt *dopt, int n, int type)
+int	ft_print_x(t_dataopt *dopt, unsigned int n, int type)
 {
-	int	wid;
-
-	wid = ft_nbrhexalen(n);
+	int nwid;
+	int	czero;
+	int	lspace;
+	int	rspace;
+	int	fminus;
+	int	mminus;
+	
+	mminus = 0;
+	nwid = ft_nbrhexalen(n);
 	if (dopt->isleft)
 	{
-		ft_puthexa(n, type);
-		inputpad(' ', dopt->dwidth - wid);
-	}
-	else if (dopt->dwidth > wid)
-	{
-		inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
-		if (dopt->preci > wid)
-			inputpad('0', dopt->preci - wid);
-		ft_puthexa(n, type);
+		fminus = (n < 0) ? 1 : 0;
+		if (dopt->iszero && !dopt->preci )
+			czero = dopt->dwidth - nwid + fminus;
+		else
+			czero = dopt->preci - nwid + fminus;
+		rspace = (dopt->dwidth > dopt->preci) ? dopt->dwidth -
+			(dopt->preci > nwid ? dopt->preci + fminus : nwid) : 0;
+		lspace = 0;
+		n = n < 0 ? -n : n;
 	}
 	else
-		ft_puthexa(n, type);
+	{
+		if (n < 0)
+		{
+			n = -n;
+			mminus = 1;
+			if(dopt->preci)
+				dopt->preci++;
+		}
+			fminus = 0;
+		if (dopt->iszero && !dopt->preci)
+			czero = dopt->dwidth - nwid;
+		else
+			czero = dopt->preci - nwid;
+		if (czero < 0)
+			czero = 0;
+		lspace = (dopt->dwidth > czero + nwid) ? dopt->dwidth - nwid - czero : 0;
+		rspace = 0;
+	}
+	inputpad('-', fminus);
+	inputpad(' ', lspace);
+	inputpad('-', mminus);
+	inputpad('0', czero);
+	if (!(dopt->ispoint && !dopt->preci))
+		ft_puthexa(n, type, n);
+	else if (dopt->dwidth)
+		inputpad(' ', 1);
+	inputpad(' ', rspace);
 	return (1);
 }
 
 int ft_print_p(t_dataopt *dopt, long long n)
 {
-	int wid;
-
-	wid = 14;
+	int nwid;
+	int	czero;
+	int	lspace;
+	int	rspace;
+	int	fminus;
+	int	mminus;
+	
+	mminus = 0;
+	nwid = ft_nbrhexalen(n) + 2;
 	if (dopt->isleft)
 	{
-		ft_putpointer(n);
-		inputpad(' ', dopt->dwidth - wid);
-	}
-	else if (dopt->dwidth > wid)
-	{
-		inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
-		if (dopt->preci > wid)
-			inputpad('0', dopt->preci - wid);
-		ft_putpointer(n);
+		fminus = (n < 0) ? 1 : 0;
+		if (dopt->iszero && !dopt->preci )
+			czero = dopt->dwidth - nwid + fminus;
+		else
+			czero = dopt->preci - nwid + fminus;
+		rspace = (dopt->dwidth > dopt->preci) ? dopt->dwidth -
+			(dopt->preci > nwid ? dopt->preci + fminus : nwid) : 0;
+		lspace = 0;
+		n = n < 0 ? -n : n;
 	}
 	else
+	{
+		if (n < 0)
+		{
+			n = -n;
+			mminus = 1;
+			if(dopt->preci)
+				dopt->preci++;
+		}
+			fminus = 0;
+		if (dopt->iszero && !dopt->preci)
+			czero = dopt->dwidth - nwid;
+		else
+			czero = dopt->preci - nwid;
+		if (czero < 0)
+			czero = 0;
+		lspace = (dopt->dwidth > czero + nwid) ? dopt->dwidth - nwid - czero : 0;
+		rspace = 0;
+	}
+	inputpad('-', fminus);
+	inputpad(' ', lspace);
+	inputpad('-', mminus);
+//	printf("'czero : %d'", czero);
+	inputpad('0', czero);
+	if (!(dopt->ispoint && !dopt->preci))
 		ft_putpointer(n);
+	else if (dopt->dwidth)
+	{
+		inputpad('0', 1);
+		inputpad('x', 1);
+	}
+	inputpad(' ', rspace);
 	return (1);
 }
-int ft_print_u(t_dataopt *dopt, int n)
-{
-	int wid;
 
-	wid = ft_nbrlen(n);
+int ft_print_u(t_dataopt *dopt, unsigned int n)
+{
+	int nwid;
+	int	czero;
+	int	lspace;
+	int	rspace;
+	int	fminus;
+	int	mminus;
+	
+	mminus = 0;
+	nwid = ft_nbrlen(n);
 	if (dopt->isleft)
 	{
-		ft_putunbr(n);
-		inputpad(' ', dopt->dwidth - wid);
-	}
-	else if (dopt->dwidth > wid)
-	{
-		inputpad(' ', dopt->dwidth - (dopt->preci > wid ? dopt->preci : wid));
-		if (dopt->preci > wid)
-			inputpad('0', dopt->preci - wid);
-		ft_putunbr(n);
+		fminus = (n < 0) ? 1 : 0;
+		if (dopt->iszero && !dopt->preci )
+			czero = dopt->dwidth - nwid + fminus;
+		else
+			czero = dopt->preci - nwid + fminus;
+		rspace = (dopt->dwidth > dopt->preci) ? dopt->dwidth -
+			(dopt->preci > nwid ? dopt->preci + fminus : nwid) : 0;
+		lspace = 0;
+		n = n < 0 ? -n : n;
 	}
 	else
+	{
+		if (n < 0)
+		{
+			n = -n;
+			mminus = 1;
+			if(dopt->preci)
+				dopt->preci++;
+		}
+			fminus = 0;
+		if (dopt->iszero && !dopt->preci)
+			czero = dopt->dwidth - nwid;
+		else
+			czero = dopt->preci - nwid;
+		if (czero < 0)
+			czero = 0;
+		lspace = (dopt->dwidth > czero + nwid) ? dopt->dwidth - nwid - czero : 0;
+		rspace = 0;
+	}
+	inputpad('-', fminus);
+	inputpad(' ', lspace);
+	inputpad('-', mminus);
+	inputpad('0', czero);
+	if (!(dopt->ispoint && !dopt->preci))
 		ft_putunbr(n);
+	else if (dopt->dwidth)
+		inputpad(' ', 1);
+	inputpad(' ', rspace);
 	return (1);
+}
+
+int	ft_print_percent(t_dataopt *dopt)
+{
+	if (dopt->isleft)
+	{
+		ft_putchar('%');
+		inputpad(' ', dopt->dwidth - 1);
+	}
+	else if (dopt->iszero)
+	{
+		inputpad('0', dopt->dwidth - 1);
+		ft_putchar('%');
+	}
+	else
+	{
+		inputpad(' ', dopt->dwidth - 1);
+		ft_putchar('%');
+	}
+	return (1);
+
+
 }
 
 int	ft_printf(const char *types, ...)
@@ -378,7 +501,7 @@ int	ft_printf(const char *types, ...)
 	while (*str)
 	{
 		initdata(&dataopt);
-		if (*(str + 1) && *str == '%' && isrightcont(str))
+		if (*(str + 1) && *str == '%' && isrightcont(str, &dataopt))
 		{
 			str++;
 			checkflag(&str, &dataopt);
@@ -397,7 +520,9 @@ int	ft_printf(const char *types, ...)
 			if (*str == 'p')
 				ft_print_p(&dataopt, (long long)va_arg(dataopt.valist, void *));
 			if (*str == 'u')
-				ft_print_u(&dataopt, va_arg(dataopt.valist, int));
+				ft_print_u(&dataopt, (unsigned int)va_arg(dataopt.valist, int));
+			if (*str == '%')
+				ft_print_percent(&dataopt);
 		}
 		else
 			write(1, str, 1);
