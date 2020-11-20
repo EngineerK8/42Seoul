@@ -1,5 +1,17 @@
 SRCS		= ./ft_printf.c \
 			  ./ft_printf_utils.c \
+			  ./ft_check.c \
+			  ./ft_getlen.c \
+			  ./ft_is.c \
+			  ./ft_isrightcont.c \
+			  ./ft_calc_print.c \
+			  ./ft_print_c.c \
+			  ./ft_print_d.c \
+			  ./ft_print_p.c \
+			  ./ft_print_percent.c \
+			  ./ft_print_u.c \
+			  ./ft_print_x.c \
+			  ./ft_inputpad.c
 	
 LIBFTDIR	= ./libft/
 LIBFT		= libft.a
@@ -24,10 +36,12 @@ all : $(NAME)
 
 clean :
 	$(RM) $(OBJS)
-	$(MAKE) -C clean
+	make clean -C $(LIBFTDIR)
 
 fclean : clean
 	$(RM) $(NAME)
+	$(RM) $(LIBFT)
+	make fclean -C $(LIBFTDIR)
 
 re : fclean all
 
