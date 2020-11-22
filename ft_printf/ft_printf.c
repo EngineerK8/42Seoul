@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 16:56:36 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/20 16:34:13 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/22 23:40:11 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		initdata(t_dataopt *dataopt)
 	dataopt->rspace = 0;
 	dataopt->fminus = 0;
 	dataopt->mminus = 0;
-	dataopt->rvalue = 0;
+	dataopt->rvalue = 1;
 	return (1);
 }
 
@@ -53,7 +53,9 @@ int		ft_printf(const char *types, ...)
 {
 	char		*str;
 	t_dataopt	dataopt;
+	int			rvalue;
 
+	rvalue = 0;
 	va_start(dataopt.valist, types);
 	str = (char *)types;
 	while (*str)
@@ -70,7 +72,8 @@ int		ft_printf(const char *types, ...)
 		else
 			write(1, str, 1);
 		str++;
+		rvalue += dataopt.rvalue;
 	}
 	va_end(dataopt.valist);
-	return (dataopt.rvalue);
+	return (rvalue);
 }
