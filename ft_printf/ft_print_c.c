@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:22:31 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/23 09:30:58 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 11:25:22 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_print_c(t_dataopt *dopt, int n)
 	}
 	else
 		ft_putchar(n);
-	dopt->rvalue = dopt->dwidth;
+	dopt->rvalue = (dopt->dwidth > wid) ? dopt->dwidth : wid;
 	return (1);
 }
 

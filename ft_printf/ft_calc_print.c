@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:18:23 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/23 10:14:50 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 15:59:07 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		remove_nagative(t_dataopt *dopt)
 long long	ft_calc_l(t_dataopt *dopt, long long n, int nwid)
 {
 	dopt->fminus = (n < 0) ? 1 : 0;
-	if (dopt->iszero && !dopt->preci)
+	if (dopt->iszero && dopt->preci <= 0)
 		dopt->czero = dopt->dwidth - nwid + dopt->fminus;
 	else
 		dopt->czero = dopt->preci - nwid + dopt->fminus;
@@ -50,7 +50,7 @@ long long	ft_calc_r(t_dataopt *dopt, long long n, int nwid)
 			dopt->preci++;
 	}
 	dopt->fminus = 0;
-	if (dopt->iszero && !dopt->preci)
+	if (dopt->iszero && dopt->preci)
 		dopt->czero = dopt->dwidth - nwid;
 	else
 		dopt->czero = dopt->preci - nwid;

@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 10:06:53 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/23 10:29:44 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 11:47:39 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_nbrlen(int n)
 	return (len);
 }
 
-int	ft_nbrulen(unsigned int n)
+int	ft_nbrulen(long long n)
 {
 	int len;
 

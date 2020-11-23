@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 13:00:03 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/23 10:26:56 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 11:47:16 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ void			checkflag(char **str, t_dataopt *dataopt);
 void			checkwidth(char **str, t_dataopt *dataopt);
 void			checkprecision(char **str, t_dataopt *dataopt);
 int				ft_nbrlen(int n);
-int				ft_nbrulen(unsigned int n);
+int				ft_nbrulen(long long n);
 int				ft_nbrhexalen(long long n);
 int				isrightcont(char *str, t_dataopt *dataopt);
 long long		ft_calc_print(t_dataopt *dopt, long long n, int nwid);
-int				ft_print_d(t_dataopt *dopt, int n);
+int				ft_print_d(t_dataopt *dopt, long long n);
 int				ft_print_c(t_dataopt *dopt, int n);
 int				ft_print_s(t_dataopt *dopt, char *s);
 int				ft_print_x(t_dataopt *dopt, unsigned int n, int type);
