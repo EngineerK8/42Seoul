@@ -157,6 +157,25 @@ ft_printf(" --- ft_Return : %d\n", ft_printf("%0.0i, %0.0d, %0.0d, %0.0d, %0.0d,
 	printf("-----------Return : %d\n", printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
 	printf("-----------ftReturn : %d\n", ft_printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
 
+	a = 3;
+	b = 0;
+	printf("\n\n\n");
+	printf("%%0ad // a = %d, b = %d\n",a, b);
+	printf("-----------Return : %d\n", printf("%0*d, %0*d", a, i, a, l));
+	printf("-----------ftReturn : %d\n", ft_printf("%0*d, %0*d", a, i, a, l));
+
+	
+	a = 0;
+	b = 2;
+	printf("\n\n\n");
+	printf("%%0a.bd // a = %d, b = %d\n",a, b);
+	printf("-----------Return : %d\n", printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
+	printf("-----------ftReturn : %d\n", ft_printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
+
+
+
+
+
 }
 
 
