@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 16:56:36 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/22 23:40:11 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 10:18:52 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		initdata(t_dataopt *dataopt)
 	dataopt->rspace = 0;
 	dataopt->fminus = 0;
 	dataopt->mminus = 0;
-	dataopt->rvalue = 1;
+	dataopt->rvalue = 0;
 	return (1);
 }
 
@@ -70,7 +70,10 @@ int		ft_printf(const char *types, ...)
 			ft_printarg(*str, &dataopt);
 		}
 		else
+		{
 			write(1, str, 1);
+			rvalue++;
+		}
 		str++;
 		rvalue += dataopt.rvalue;
 	}

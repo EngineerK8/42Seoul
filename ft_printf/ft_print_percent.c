@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:27:09 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/20 16:29:14 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 10:00:02 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,7 @@ int	ft_print_percent(t_dataopt *dopt)
 		ft_putchar('%');
 	}
 	dopt->rvalue = dopt->dwidth;
+	if (dopt->rvalue == 0)
+		dopt->rvalue = 1;
 	return (1);
 }

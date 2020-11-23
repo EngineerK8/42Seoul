@@ -6,11 +6,12 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:21:37 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/20 16:42:58 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 10:25:55 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 
 int	ft_print_d(t_dataopt *dopt, int n)
 {
@@ -26,8 +27,10 @@ int	ft_print_d(t_dataopt *dopt, int n)
 		ft_putnbr(n);
 	else if (dopt->dwidth)
 		inputpad(' ', 1);
+	else
+		return (1);
 	inputpad(' ', dopt->rspace);
-	dopt->rvalue = dopt->fminus + dopt->lspace + dopt->mminus + dopt->czero \
+	dopt->rvalue = dopt->lspace + dopt->czero \
 		+ nwid + dopt->rspace;
 	return (1);
 }

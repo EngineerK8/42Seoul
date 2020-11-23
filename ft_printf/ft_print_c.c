@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:22:31 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/20 16:44:28 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 09:30:58 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	ft_print_s(t_dataopt *dopt, char *s)
 	if (dopt->ispoint && !dopt->preci)
 	{
 		inputpad(' ', dopt->dwidth);
+		dopt->rvalue = dopt->dwidth;
 		return (1);
 	}
 	if (dopt->isleft)

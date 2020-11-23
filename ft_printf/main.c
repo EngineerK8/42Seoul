@@ -31,6 +31,14 @@ printf("--------------------------\n");
 
 	printf("%%08.5d, 34 : %08.5d\n", 34);
 	ft_printf("%%08.5d, 34 : %08.5d\n", 34);
+
+	int a;
+	int b;
+
+	a = printf("%-7i\n", 33);
+	b = ft_printf("%-7i\n", 33);
+
+	printf("a: %d, b: %d\n", a, b);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:23:56 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/20 16:45:25 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/23 10:28:14 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ int	ft_print_x(t_dataopt *dopt, unsigned int n, int type)
 		ft_puthexa(n, type, n);
 	else if (dopt->dwidth)
 		inputpad(' ', 1);
+	else
+		return (0);
 	inputpad(' ', dopt->rspace);
-	dopt->rvalue = dopt->fminus + dopt->lspace + dopt->mminus + dopt->czero +
+	dopt->rvalue = dopt->lspace + dopt->czero +
 		dopt->rspace + nwid;
 	return (1);
 }
