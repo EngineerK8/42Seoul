@@ -172,7 +172,40 @@ ft_printf(" --- ft_Return : %d\n", ft_printf("%0.0i, %0.0d, %0.0d, %0.0d, %0.0d,
 	printf("-----------Return : %d\n", printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
 	printf("-----------ftReturn : %d\n", ft_printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
 
+	a = 0;
+	b = 2;
+	printf("\n\n\n");
+	printf("%%0%d.%dd\n",a, b);
+	printf("-----------Return : %d\n", printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
+	printf("-----------ftReturn : %d\n", ft_printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
 
+	a = 2;
+	b = 1;
+	printf("\n\n\n");
+	printf("%%0%d.%dd\n",a, b);
+	printf("-----------Return : %d\n", printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
+	printf("-----------ftReturn : %d\n", ft_printf("%0*.*d, %0*.*d", a, b, i, a, b, l));
+
+	a = 4;
+	b = 3;
+	printf("\n\n\n");
+	printf("%%-%d.%dd\n",a, b);
+	printf("-----------Return : %d\n", printf("%-*.*d, %-*.*d, %-*.*d", a, b, i, a, b, l, a, b, j));
+	printf("-----------ftReturn : %d\n", ft_printf("%-*.*d, %-*.*d, %-*.*d", a, b, i, a, b, l, a, b, j));
+
+
+	a = 0;
+	b = 0;
+	printf("\n\n\n");
+	printf("%%.%du\n", b);
+	printf("-----------Return : %d\n", printf("%.*u, %.*x, %.*X", b, i, b, i, b, i));
+	printf("-----------ftReturn : %d\n", ft_printf("%.*u, %.*x, %.*X", b, i, b, i, b, i));
+
+
+
+	printf("\n\n\n");
+	printf("-----------Return : %d\n", printf("%-16.p" , &b));
+	printf("-----------ftReturn : %d\n", ft_printf("%-16.p",&b));
 
 
 

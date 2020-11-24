@@ -45,22 +45,24 @@ SRCS_B = ./ft_lstnew.c \
 NAME	= libft.a
 OBJS	= $(SRCS:.c=.o)
 OBJS_B	= $(SRCS_B:.c=.o)
-INCS	= .
 RM		= rm -f
 LIBC	= ar rc
 CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 
-.c.o :
-	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS)
+all : $(NAME)
 
 $(NAME) : $(OBJS)
 	$(LIBC) $(NAME) $(OBJS)
 
-all : $(NAME)
+$(OBJS) :
+	$(CC) $(CFLAGS) -c $(SRCS)
 
 bonus : $(NAME) $(OBJS_B)
 	$(LIBC) $(NAME) $(OBJS_B)
+
+$(OBJS_B) :
+	$(CC) $(CFLAGS) -c $(SRCS_B)
 
 clean :
 	$(RM) $(OBJS) $(OBJS_B)
@@ -69,3 +71,5 @@ fclean : clean
 	$(RM) $(NAME) $(bonus)
 
 re : fclean all
+	
+.PHONY: all clean fclean re

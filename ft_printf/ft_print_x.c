@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:23:56 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/23 10:28:14 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/24 18:43:31 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_print_x(t_dataopt *dopt, unsigned int n, int type)
 	inputpad(' ', dopt->lspace);
 	inputpad('-', dopt->mminus);
 	inputpad('0', dopt->czero);
-	if (!(dopt->ispoint && !dopt->preci))
+	if (!(dopt->ispoint && !dopt->preci && n == 0))
 		ft_puthexa(n, type, n);
 	else if (dopt->dwidth)
 		inputpad(' ', 1);

@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 10:03:34 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/20 11:13:53 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/24 11:15:06 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	checkprecision(char **str, t_dataopt *dataopt)
 	if (!ispoint(**str, &*dataopt))
 		return ;
 	(*str)++;
+	dataopt->ispoint = 1;
 	while (isstar(**str))
 	{
 		dataopt->preci = va_arg(dataopt->valist, int);

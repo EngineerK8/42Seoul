@@ -18,30 +18,28 @@ LIBFT		= libft.a
 
 NAME		= libftprintf.a
 OBJS		= $(SRCS:.c=.o)
-INCS		= .
 RM			= rm -f
-LIBC		= ar rc
+LIBC		= ar -rcs
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror
 
-.c.o :
-	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS)
+all : $(NAME)
 
 $(NAME) : $(OBJS)
 	$(MAKE) -C $(LIBFTDIR)
 	cp $(LIBFTDIR)$(LIBFT) $(NAME)
 	$(LIBC) $(NAME) $(OBJS)
 
-all : $(NAME)
+$(OBJS) :
+	$(CC) $(CFLAGS) -c $(SRCS)
 
 clean :
 	$(RM) $(OBJS)
-	make clean -C $(LIBFTDIR)
+	$(MAKE) clean -C $(LIBFTDIR)
 
 fclean : clean
 	$(RM) $(NAME)
-	$(RM) $(LIBFT)
-	make fclean -C $(LIBFTDIR)
+	$(MAKE) fclean -C $(LIBFTDIR)
 
 re : fclean all
 
