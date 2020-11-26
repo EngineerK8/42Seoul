@@ -6,13 +6,13 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:21:37 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/23 14:37:25 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/25 11:12:57 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_print_d(t_dataopt *dopt, long long  n)
+int	ft_print_d(t_dataopt *dopt, long long n)
 {
 	int nwid;
 

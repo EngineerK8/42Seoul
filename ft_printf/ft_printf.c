@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.kr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 16:56:36 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/24 11:15:16 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/25 11:12:22 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,14 @@ void	ft_printarg(char c, t_dataopt *dataopt)
 		ft_print_percent(&*dataopt);
 }
 
+void	ft_checkfwp(char **str, t_dataopt *dataopt)
+{
+	(*str)++;
+	checkflag(&*str, &*dataopt);
+	checkwidth(&*str, &*dataopt);
+	checkprecision(&*str, &*dataopt);
+}
+
 int		ft_printf(const char *types, ...)
 {
 	char		*str;
@@ -63,10 +71,7 @@ int		ft_printf(const char *types, ...)
 		initdata(&dataopt);
 		if (*(str + 1) && *str == '%' && isrightcont(str, &dataopt))
 		{
-			str++;
-			checkflag(&str, &dataopt);
-			checkwidth(&str, &dataopt);
-			checkprecision(&str, &dataopt);
+			ft_checkfwp(&str, &dataopt);
 			ft_printarg(*str, &dataopt);
 		}
 		else

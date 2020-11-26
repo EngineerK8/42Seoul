@@ -11,7 +11,8 @@ SRCS		= ./ft_printf.c \
 			  ./ft_print_percent.c \
 			  ./ft_print_u.c \
 			  ./ft_print_x.c \
-			  ./ft_inputpad.c
+			  ./ft_inputpad.c \
+			  ./ft_printf_utils_2nd.c
 	
 LIBFTDIR	= ./libft/
 LIBFT		= libft.a

@@ -6,7 +6,7 @@
 /*   By: hekang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 11:18:23 by hekang            #+#    #+#             */
-/*   Updated: 2020/11/24 19:58:06 by hekang           ###   ########.fr       */
+/*   Updated: 2020/11/25 11:21:35 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ long long	ft_calc_l(t_dataopt *dopt, long long n, int nwid)
 		dopt->czero = dopt->dwidth - nwid + dopt->fminus;
 	else
 		dopt->czero = dopt->preci - nwid + dopt->fminus;
-	dopt->rspace = (dopt->dwidth > dopt->preci) ? dopt->dwidth -\
-		(dopt->preci >= nwid ? dopt->preci + dopt->fminus : nwid) : 0;
+	if (dopt->dwidth > dopt->preci)
+		dopt->rspace = dopt->dwidth - (dopt->preci >= nwid ?
+				dopt->preci + dopt->fminus : nwid);
+	else
+		dopt->rspace = 0;
 	dopt->lspace = 0;
 	n = n < 0 ? -n : n;
 	return (n);
