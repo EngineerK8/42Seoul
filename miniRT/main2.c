@@ -142,7 +142,7 @@ t_vec	ray_color(t_vec orig, t_vec dir)
 	t_vec unit_direction = unit_vector(dir);
 	float t = 0.5 * (unit_direction.y + 1.0);
 	t_vec a= make_v(1.0);
-	t_vec b; b.x = 0.5; b.y = 0.3; b.z = 1.0;
+	t_vec b; b.x = 0.5; b.y = 0.7; b.z = 1.0;
 	return v_add(v_mul_n(a, 1.0 - t), v_mul_n(b, t));
 }
 
@@ -167,7 +167,7 @@ int		main()
 	// Camera
 	float		viewport_height = 2.0;
 	float		viewport_width = aspect_ratio * viewport_height;
-	float		focal_length = 2.0;
+	float		focal_length = 1.0;
 
 	t_vec		origin = {0, 0, 0};
 	t_vec		horizontal = {viewport_width, 0, 0};
@@ -178,10 +178,9 @@ int		main()
 	// Render
 	
 	int		j = 0;
-	int		i;
 	while (j < image_height)
 	{
-		i = 0;
+		int i = 0;
 		while (i <image_width)
 		{
 			float u = (double) i / (image_width - 1);
@@ -197,36 +196,6 @@ int		main()
 		}
 		++j;
 	}
-
-	j = 100;
-	while (j < image_height / 2)
-	{
-		i = 100;
-		while (i < image_width / 2)
-		{
-			float u = (double) i / (image_width - 1);
-			float v = (image_height - (double)j - 1) / (image_height - 1);
-
-			t_vec a = origin;
-			t_vec b = v_add(lower_left_corner, v_add(v_mul_n(horizontal,u), v_mul_n(v_sub(vertical, origin), v)));
-			t_vec pixel_color = {0.5, 0.99, 0.5};
-			write_color(app, pixel_color);
-			mlx_pixel_put(app->mlx_ptr, app->win_ptr, i, j, app->int_color);
-			app->data[j * image_width + i] = app->int_color;
-
-			
-			
-			/*write_color(app, color_red);
-			mlx_pixel_put(app->mlx_ptr, app->win_ptr, i, j, app->int_color);
-			app->data[j * image_width + i] = app->int_color;*/
-			i++;
-		}
-		j++;
-	}
-
-
-
-
 	mlx_put_image_to_window (app->mlx_ptr, app->win_ptr, app->img_ptr, 0, 0);
 	mlx_loop(app->mlx_ptr);
 }
