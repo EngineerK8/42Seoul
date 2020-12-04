@@ -146,6 +146,12 @@ t_vec	ray_color(t_vec orig, t_vec dir)
 	return v_add(v_mul_n(a, 1.0 - t), v_mul_n(b, t));
 }
 
+void	hit_sphere(t_vec orig, t_vec dir)
+{
+	t_vec	oc = origin - center;
+	if (
+
+
 #include <stdio.h>
 
 int		main()
@@ -223,9 +229,6 @@ int		main()
 		}
 		j++;
 	}
-
-
-
 
 	mlx_put_image_to_window (app->mlx_ptr, app->win_ptr, app->img_ptr, 0, 0);
 	mlx_loop(app->mlx_ptr);
