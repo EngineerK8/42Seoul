@@ -137,24 +137,48 @@ t_vec	unit_vector(t_vec v)
 	return (v_div(v, length(v)));
 }
 
-int	hit_sphere(t_vec center, double radius, t_vec origin, t_vec direction)
+t_vec	at(t_vec orig, t_vec dir, double t)
+{
+	return (v_add(orig, v_mul_n(dir, t)));
+}
+
+double	hit_sphere(t_vec center, double radius, t_vec origin, t_vec direction)
 {
 	t_vec oc = v_sub(origin, center);
 	float a = dot(direction, direction);
 	float b = 2.0 * dot(oc, direction);
 	float c = dot(oc, oc) - radius * radius;
 	float discriminant = b * b - 4 * a * c;
-	return (discriminant > 0 ? 1 : 0);
+	if (discriminant < 0)
+		return (-1.0);
+	else
+		return ((-b - sqrt(discriminant)) / (2.0 * a));
+
+	//return (discriminant > 0 ? 1 : 0);
 }
 
 t_vec	ray_color(t_vec orig, t_vec dir)
 {
 	t_vec sphere = {0, 0, -1};
-	t_vec sphere_color = {0, 1, 0};
-	if (hit_sphere(sphere, 0.5, orig, dir))
-		return (sphere_color);
+	float t = hit_sphere(sphere, 0.5, orig, dir);
+	if (t > 0.0)
+	{
+		t_vec N = unit_vector(v_sub(at(orig, dir, t), sphere));
+		t_vec color;
+		color.x = N.x + 1;
+		color.y = N.y + 1;
+		color.z = N.z + 1;
+		return (v_mul_n(color, 0.5));
+	}
+
+
+
+//	t_vec sphere_color = {0, 1, 0};
+//	if (hit_sphere(sphere, 0.5, orig, dir))
+//		return (sphere_color);
 	t_vec unit_direction = unit_vector(dir);
-	float t = 0.5 * (unit_direction.y + 1.0);
+	//float t = 0.5 * (unit_direction.y + 1.0);
+	t = 0.5 * (unit_direction.y + 1.0);
 	t_vec a= make_v(1.0);
 	t_vec b; b.x = 0.5; b.y = 0.7; b.z = 1.0;
 	return (v_add(v_mul_n(a, 1.0 - t), v_mul_n(b, t)));
