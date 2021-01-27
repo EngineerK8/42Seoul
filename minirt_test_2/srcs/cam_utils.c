@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 22:26:06 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/19 16:05:16 by hekang           ###   ########.fr       */
+/*   Updated: 2021/01/25 15:32:56 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_camera        *create_cam(double aspect_ratio)
     double      focal_length;
 
     result = (t_camera *)malloc(sizeof(t_camera));
+    result->aspect_ratio = aspect_ratio;
     focal_length = 1.0;
     viewport_height = 2.0;
     viewport_width = viewport_height * aspect_ratio;

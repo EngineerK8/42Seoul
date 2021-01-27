@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hittable_utils.c                                   :+:      :+:    :+:   */
+/*   hitlst_info_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/19 17:14:55 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/25 14:50:47 by hekang           ###   ########.fr       */
+/*   Created: 2021/01/25 15:07:26 by hekang            #+#    #+#             */
+/*   Updated: 2021/01/25 15:25:28 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_hittable          *hittable_create(void *obj, int obj_type)
+t_hitlst_info       *hitlst_info_new(t_ray *r)
 {
-    t_hittable      *result;
+    t_hitlst_info   *result;
 
-    result = (t_hittable *)malloc(sizeof(t_hittable));
-    result->obj = obj;
-    result->obj_type = obj_type;
-    if (obj_type == OBJ_SPHERE)
-        result->hit = &sphere_hit;
+    result = (t_hitlst_info *)malloc(sizeof(t_hitlst_info));
+    result->ray = r;
+    result->t_min = HIT_T_MIN;
+    result->t_max = INFINITY;
+    result->rec = hit_record_new();
     return (result);
+}
+
+void                free_hitlst_info(t_hitlst_info *info, int is_ray_ori_free)
+{
+    free_ray(info->ray, is_ray_ori_free);
+    free_hit_record(info->rec);
+    free(info);
 }

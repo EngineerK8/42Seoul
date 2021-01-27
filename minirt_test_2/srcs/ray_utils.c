@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 13:54:27 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/15 21:15:23 by hekang           ###   ########.fr       */
+/*   Updated: 2021/01/25 15:22:25 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ t_vec       *ray_at(t_ray *ray, double t)
     return (result);
 }
 
-void       free_ray(t_ray *ray)
+void       free_ray(t_ray *ray, int is_ray_free)
 {
     if (ray == NULL)
         return ;
-    if (ray->orig != NULL)
+    if (ray->orig != NULL && is_ray_free)
         free(ray->orig);
     free(ray->dir);
     free(ray);

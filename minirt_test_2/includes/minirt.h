@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:00:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/17 11:18:53 by hekang           ###   ########.fr       */
+/*   Updated: 2021/01/27 17:34:48 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define X_KEY_RELEASE 3
 
 # define TRUE 1
-# define FALSE 2
+# define FALSE 0
 # define HIT_T_MIN 0.001
 
 # include <stdlib.h>
@@ -62,17 +62,21 @@ t_vec       *vec_unit(t_vec *u);
 t_hit_record	*hit_record_new(void);
 void			reset_hit_record(t_hit_record *rec);
 void			free_hit_record(t_hit_record *rec);
+int         hitlst_hit(t_list *lst, t_hitlst_info *info);
+
 void			hit_set_normal(t_hit_record *record, t_ray *r);
 void				draw_hittable(t_camera *cam, t_list *lst);
 void	color_map(void *mlx, void *win,int w,int h);
 
 t_vec       *ray_at(t_ray *ray, double t);
 t_ray       *create_ray(t_vec *origin, t_vec *direction);
-void       free_ray(t_ray *ray);
+void       free_ray(t_ray *ray, int is_ray_free);
 double	clamp(double x, double min, double max);
 int             get_color(t_vec *color);
 t_vec         *ray_color(t_ray *r);
 t_camera        *create_cam(double aspect_ratio);
 void        draw_sky(t_img_data *data, t_camera *cam);
+t_hitlst_info       *hitlst_info_new(t_ray *r);
+void                free_hitlst_info(t_hitlst_info *info, int is_ray_ori_free);
 
 #endif

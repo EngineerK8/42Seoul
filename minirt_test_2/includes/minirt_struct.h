@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:04:48 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/17 11:14:02 by hekang           ###   ########.fr       */
+/*   Updated: 2021/01/25 15:46:21 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct          s_hitlst_info
     double              t_min;
     double              t_max;
     double              a;
-    double              half_b;
+    double              b;
     double              root_d;
     t_hit_record        *rec;
 }                       t_hitlst_info;

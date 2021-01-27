@@ -6,12 +6,13 @@
 #    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/14 00:08:03 by hekang            #+#    #+#              #
-#    Updated: 2021/01/17 11:19:01 by hekang           ###   ########.fr        #
+#    Updated: 2021/01/25 15:26:56 by hekang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC		= img_utils.c main.c mlx_utils.c ray_utils.c vec_calc_apply.c vec_calc.c vec_create.c \
-		vec_calc_extra.c cal_utils.c cam_utils.c sky_utils.c sphere.c
+		vec_calc_extra.c cal_utils.c cam_utils.c sky_utils.c sphere.c hitlst_utils.c hittable_utils.c \
+		draw_hittable.c hitlst_info_utils.c hit_record.c
 
 SRCDIR	= ./srcs/
 SRCS 	= $(addprefix $(SRCDIR), $(SRC))
