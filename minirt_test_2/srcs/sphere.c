@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 11:15:49 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/27 17:38:41 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/05 16:49:56 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,54 +24,82 @@ t_sphere        *init_sphere(t_vec *center, double radius, t_vec *color, t_vec *
     return (result);
 }
 
-int			check_sphere_hitrange(void *s, t_ray *r,
-									t_hitlst_info *info, t_hit_record *rec)
-{
-	int		is_big_t;
-	double	t;
+// int			check_sphere_hitrange(void *s, t_ray *r, t_hit_record *rec)
+// {
+// 	int		is_big_t;
+// 	double	t;
 
-	is_big_t = -1;
-	while ((++is_big_t) < 2)
-	{
-		t = (-info->b / 2 + info->root_d * (is_big_t ? (1) : (-1))) / info->a;
-		if (info->t_min < t && t < info->t_max)
-		{
-			if (rec->p)
-				reset_hit_record(rec);
-			rec->t = t;
-			rec->p = ray_at(r, t);
-			rec->normal = vec_sub(rec->p, ((t_sphere *)s)->center);
-			vec_div_const_apply(rec->normal, ((t_sphere *)s)->radius);
-			hit_set_normal(rec, r);
-			// rec->mat = info->mat;
-			return (TRUE);
-		}
-	}
-	return (FALSE);
+// 	is_big_t = -1;
+// 	while ((++is_big_t) < 2)
+// 	{
+// 		t = (-info->b / 2 + info->root_d * (is_big_t ? (1) : (-1))) / info->a;
+// 		if (info->t_min < t && t < info->t_max)
+// 		{
+// 			if (rec->p)
+// 				reset_hit_record(rec);
+// 			rec->t = t;
+// 			rec->p = ray_at(r, t);
+// 			rec->normal = vec_sub(rec->p, ((t_sphere *)s)->center);
+// 			vec_div_const_apply(rec->normal, ((t_sphere *)s)->radius);
+// 			hit_set_normal(rec, r);
+// 			// rec->mat = info->mat;
+// 			return (TRUE);
+// 		}
+// 	}
+// 	return (FALSE);
+// }
+
+void		get_sphere_uv(t_hit_record *rec)
+{
+	double	theta;
+	double	phi;
+
+	theta = acos(-(rec->normal->y));
+	phi = atan2(-(rec->normal->z), rec->normal->x) + M_PI;
+	rec->u = phi / (2 * M_PI);
+	rec->v = theta / M_PI;
 }
 
-int         sphere_hit(void *s, t_ray *r, t_hitlst_info *info, t_hit_record *rec)
+void	set_face_normal(t_ray *r, t_hit_record *rec)
 {
-    double      discriminant;
-    double      a;
-    double      b;
-    double      c;
-    t_vec       *oc;
+	rec->is_front_face = vec_dot(r->dir, rec->normal) < 0;
+	rec->normal = (rec->is_front_face) ? rec->normal : vec_mul_const(rec->normal, -1);
+}
 
-    oc = vec_sub(r->orig, ((t_sphere *)s)->center);
-    a = vec_dot(r->dir, r->dir);
-    b = 2.0 * vec_dot(r->dir, oc);
-    c = vec_dot(oc, oc) - pow(((t_sphere *)s)->radius, 2);
-    discriminant = pow(b / 2, 2) - a * c;
+int         sphere_hit(void *obj, t_ray *r, t_hit_record *rec)
+{
+    t_sphere    *sp;
+    t_sp_set    s;
 
-    if (discriminant <= 0)
+    sp = ((t_sphere *)obj);
+    s.oc = vec_sub(r->orig, sp->center);
+    s.a = vec_dot(r->dir, r->dir);
+    s.half_b = vec_dot(r->dir, s.oc);
+    s.c = vec_dot(s.oc, s.oc) - pow(sp->radius, 2);
+    s.discriminant = pow(s.half_b, 2) - s.a * s.c;
+    //printf("disciminant: %f\n", s.discriminant);
+    if (s.discriminant < 0.00001)
         return (FALSE);
-    info->a = a;
-    info->b = b;
-    info->root_d = sqrt(discriminant);
-    return (check_sphere_hitrange(s, r, info, rec));
-
-
+    s.sqrtd = sqrt(s.discriminant);
+    s.root = (-s.half_b + s.sqrtd) / s.a;
+  	if (s.root < rec->t_min || s.root > rec->t_max)
+	{
+		s.root = (-s.half_b + s.sqrtd) / s.a;
+		if (s.root < rec->t_min || s.root > rec->t_max)
+			return (FALSE);
+	}
+    // printf("radius: %f\n", sp->radius );
+    // printf("color x: %f\n", sp->color->x );
+    // printf("color y: %f\n", sp->color->y );
+    // printf("color z: %f\n", sp->color->z );
+    
+    rec->t = s.root;
+    rec->p = ray_at(r, s.root);
+    rec->color = sp->color;
+    rec->normal = vec_div_const(vec_sub(rec->p, sp->center), sp->radius);
+	get_sphere_uv(rec);
+	set_face_normal(r, rec);
+    return (TRUE);
     // if (discriminant < 0)
     //     return (-1.0);
     // else

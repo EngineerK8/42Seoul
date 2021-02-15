@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:00:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/27 17:34:48 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/08 16:20:45 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINIRT_H
 # define PI 3.14159265358917932385
 # define OBJ_SPHERE 1
+# define OBJ_PLANE 2
 # define ANTI_SAMPLES 50
 # define REFLECT_DEPTH 5
 # define X_KEY_PRESS 2
@@ -42,7 +43,7 @@ void            free_hitlst(t_list *lst);
 void        mlx_show(t_img_data *data, char *title);
 t_hittable      *hittable_create(void *obj, int obj_type);
 void			free_hittable(t_hittable *h);
-int         sphere_hit(void *s, t_ray *r, t_hitlst_info *info, t_hit_record *rec);
+int         sphere_hit(void *s, t_ray *r, t_hit_record *rec);
 void        free_sphere(t_sphere *s);
 
 t_vec       *vec_create(double x, double y, double z);
@@ -62,10 +63,12 @@ t_vec       *vec_unit(t_vec *u);
 t_hit_record	*hit_record_new(void);
 void			reset_hit_record(t_hit_record *rec);
 void			free_hit_record(t_hit_record *rec);
-int         hitlst_hit(t_list *lst, t_hitlst_info *info);
+// int         hitlst_hit(t_list *lst, t_hitlst_info *info);
+int         hitlst_hit(t_list *lst, t_hit_record *rec);
+
 
 void			hit_set_normal(t_hit_record *record, t_ray *r);
-void				draw_hittable(t_camera *cam, t_list *lst);
+void				draw_hittable(t_camera *cam, t_list *lst, t_light *light);
 void	color_map(void *mlx, void *win,int w,int h);
 
 t_vec       *ray_at(t_ray *ray, double t);
@@ -76,7 +79,14 @@ int             get_color(t_vec *color);
 t_vec         *ray_color(t_ray *r);
 t_camera        *create_cam(double aspect_ratio);
 void        draw_sky(t_img_data *data, t_camera *cam);
-t_hitlst_info       *hitlst_info_new(t_ray *r);
-void                free_hitlst_info(t_hitlst_info *info, int is_ray_ori_free);
+// t_hitlst_info       *hitlst_info_new(t_ray *r);
+// void                free_hitlst_info(t_hitlst_info *info, int is_ray_ori_free);
+
+int             plane_hit(void *s, t_ray *r, t_hit_record *rec);
+t_plane         *init_plane(t_vec *p, t_vec *normal, t_vec *albedo);
+t_light         *init_light(t_vec *ori, double ratio, t_vec *color, t_ambient *A);
+t_ambient       *init_ambient(double ratio, t_vec *color);
+t_camera        *init_cam(t_vec *lookfrom, t_vec *lookat, double aspect_ratio, double vfov);
+int			vec_is_parallel(t_vec *a, t_vec *b);
 
 #endif

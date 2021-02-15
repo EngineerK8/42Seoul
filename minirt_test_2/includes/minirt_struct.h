@@ -6,12 +6,25 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:04:48 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/25 15:46:21 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/05 22:36:10 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_STRUCT_H
 # define MINIRT_STRUCT_H
+
+# define DIFFUSE 0
+# define METAL 1
+
+# define SP 0
+# define LIGHT 1
+# define PL	2
+# define SQ 3
+# define CY 4
+# define TR 5
+# define CB 6
+# define PM 7
+# define CAM 11
 
 typedef struct      s_img_data
 {
@@ -51,36 +64,70 @@ typedef struct      s_sphere
     t_vec           *albedo;
 }                   t_sphere;
 
+typedef struct		s_sp_set
+{
+	t_vec		*oc;
+	double		a;
+	double		half_b;
+	double		c;
+	double		discriminant;
+	double		sqrtd;
+	double		root;
+}                   t_sp_set;
+
+typedef struct      s_plane
+{
+    t_vec           *p;
+    t_vec           *normal;
+    t_vec           *albedo;
+}                   t_plane;
+
 typedef struct      s_ray
 {
     t_vec           *orig;
     t_vec           *dir;
 }                   t_ray;
 
+typedef struct		    s_material
+{
+	int             	type;
+    t_vec               *color;
+	double  			option1;
+}                       t_material;
+
 typedef struct          s_hit_record
 {
     t_vec               *p;
     t_vec               *normal;
-    double              t;
-    int                 is_front_face;
-}                       t_hit_record;
-
-typedef struct          s_hitlst_info
-{
+	int            	    *obj;
+	// t_material	        *material;
+    t_vec               *color;
     t_ray               *ray;
     double              t_min;
     double              t_max;
-    double              a;
-    double              b;
-    double              root_d;
-    t_hit_record        *rec;
-}                       t_hitlst_info;
+    double              t;
+    double              u;
+    double              v;
+    int                 is_front_face;
+}                       t_hit_record;
+
+
+// typedef struct          s_hitlst_info
+// {
+//     t_ray               *ray;
+//     double              t_min;
+//     double              t_max;
+//     double              a;
+//     double              b;
+//     double              root_d;
+//     t_hit_record        *rec;
+// }                       t_hitlst_info;
 
 typedef struct      s_hittable
 {
     void            *obj;
     int             obj_type;
-    int             (*hit)(void *s, t_ray *r, t_hitlst_info *info, t_hit_record *);
+    int             (*hit)(void *s, t_ray *r, t_hit_record *);
 }                   t_hittable;
 
 typedef struct			s_mlx_data
@@ -97,5 +144,20 @@ typedef struct      s_vars
     void            *mlx;
     void            *win;
 }                   t_vars;
+
+typedef struct      s_light
+{
+    t_vec           *origin;
+    double          ratio;
+    t_vec           *color;
+    double          a_ratio;
+    t_vec           *a_color;
+}                   t_light;
+
+typedef struct      s_ambient
+{
+    double           ratio;
+    t_vec           *color;
+}                   t_ambient;
 
 #endif
