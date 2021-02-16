@@ -6,13 +6,13 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 17:18:41 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/09 10:32:36 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/16 11:54:41 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int                 cal_hittable_color(t_list *lst, t_hit_record *rec, t_light *light)
+int                 cal_hittable_color(t_scene *scene, t_hit_record *rec)
 {
     t_vec           *color;
     t_vec           *tmp;
@@ -21,7 +21,7 @@ int                 cal_hittable_color(t_list *lst, t_hit_record *rec, t_light *
 
     color = NULL;
     result = 0;
-    if (hitlst_hit(lst, rec))
+    if (hitlst_hit(scene->obj, rec))
     {
         // color = vec_add_apply(vec_create(1, 1, 1), info->rec->normal);
         // printf("22222222222\n");
@@ -29,7 +29,7 @@ int                 cal_hittable_color(t_list *lst, t_hit_record *rec, t_light *
         // color = vec_create(0.6, 0, info->rec->normal->z / 3 );
         // color = vec_unit(rec->normal);
         // color = vec_create(0, 0, color->z - 0.3);
-        tmp = vec_sub(rec->p, light->origin);
+        tmp = vec_sub(rec->p, scene->light->origin);
         tmp = vec_unit(tmp);
         t = vec_dot(tmp, rec->normal);
 
@@ -38,11 +38,11 @@ int                 cal_hittable_color(t_list *lst, t_hit_record *rec, t_light *
 
         // tmp = vec_add(tmp,vec_mul_const(light->color, light->ratio));
 
-        tmp = vec_mul_const(light->color, light->ratio * t);
+        tmp = vec_mul_const(scene->light->color, scene->light->ratio * t);
         tmp = vec_add(color, tmp);
 
         // color =vec_mul_const(color, t * light->ratio);
-        color = vec_add(tmp, vec_mul_const(light->a_color, light->a_ratio));
+        color = vec_add(tmp, vec_mul_const(scene->ambient->color, scene->ambient->ratio));
 
 
         // color = vec_create(rec->color->x, rec->color->y, rec->color->z);
@@ -81,30 +81,50 @@ t_ray               *camera_get_ray(t_camera *cam, double u, double v)
     return (create_ray(cam->origin, tmp));
 }
 
-void                draw_hittable(t_camera *cam, t_list *lst, t_light *light)
+// void                draw_hittable(t_camera *cam, t_list *lst, t_light *light)
+void                draw_hittable(t_scene *scene)
 {
     int             x;
     int             y;
     double          u;
     double          v;
     t_hit_record    *rec;
+    int n = 0;
 
-    y = cam->data->height;
-    // printf("y: %d \n", y);
-    // printf("cam->data->width: %d \n", cam->data->width);
-    // printf("cam->data->height: %d \n", cam->data->height);
-    while ((--y) >= 0)
+    y = scene->img->height;
+    while (n < scene->n_cam)
     {
-        x = -1;
-        while ((++x) < cam->data->width)
+        printf("11111\n");
+        while ((--y) >= 0)
         {
-            u = (double)x / (cam->data->width - 1);
-            v = (double)y / (cam->data->height - 1);
-            // printf("u: %f / v: %f\n", u, v);
-            rec = hit_record_new();
-            rec->ray = camera_get_ray(cam, u, v);
-            cam->data->img[x][y] = cal_hittable_color(lst, rec, light);
-            free_hit_record(rec);
+            x = -1;
+            while ((++x) < scene->img->width)
+            {
+                u = (double)x / (scene->img->width - 1);
+                v = (double)y / (scene->img->height - 1);
+                rec = hit_record_new();
+                rec->ray = camera_get_ray(scene->cam->content, u, v);
+                ((t_camera *)(scene->cam->content))->data->img[x][y] =
+                    cal_hittable_color(scene, rec);
+                free_hit_record(rec);
+            }
         }
+        printf("222\n");
+        if (scene->cam->next)
+        {
+            printf("333\n");
+            scene->cam = scene->cam->next;
+            // ((t_camera *)(scene->cam->content))->data = scene->img;
+        }
+            printf("444\n");
+            printf("content : %p\n",((t_camera *)(scene->cam->content)) );
+            printf("x : %f\n", ((t_camera *)(scene->cam->content))->origin->x);
+            printf("y : %f\n", ((t_camera *)(scene->cam->content))->origin->y);
+            printf("z : %f\n", ((t_camera *)(scene->cam->content))->origin->z);
+            // printf("00 : %d\n", ((t_camera *)(scene->cam->content))->data->img[0][0]);
+            // printf("11 : %d\n", ((t_camera *)(scene->cam->content))->data->img[1][1]);
+            
+        y = scene->img->height;
+        n++;
     }
 }

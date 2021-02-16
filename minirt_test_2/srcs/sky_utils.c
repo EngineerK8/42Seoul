@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 22:24:29 by hekang            #+#    #+#             */
-/*   Updated: 2021/01/27 20:28:43 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/15 15:43:11 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int             get_color(t_vec *color)
     int         y;
     int         z;
     // xyz 가 1보다 클 경우 앞의 색상에 영향을 줌.
-    x = clamp(color->x, 0, 0.9999) * 256;
-    y = clamp(color->y, 0, 0.9999) * 256;
-    z = clamp(color->z, 0, 0.9999) * 256;
+    x = clamp(color->x, 0, 255);
+    y = clamp(color->y, 0, 255);
+    z = clamp(color->z, 0, 255);
     return(x << 16 | y << 8 | z);
 }
 

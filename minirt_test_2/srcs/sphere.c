@@ -6,13 +6,13 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 11:15:49 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/05 16:49:56 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/15 15:20:59 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_sphere        *init_sphere(t_vec *center, double radius, t_vec *color, t_vec *albedo)
+t_sphere        *init_sphere(t_vec *center, double radius, t_vec *color)
 {
     t_sphere    *result;
 
@@ -20,7 +20,6 @@ t_sphere        *init_sphere(t_vec *center, double radius, t_vec *color, t_vec *
     result->center = center;
     result->radius = radius;
     result->color = color;
-    result->albedo = albedo;
     return (result);
 }
 

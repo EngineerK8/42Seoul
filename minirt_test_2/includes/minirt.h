@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:00:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/08 16:20:45 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/16 13:13:36 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,25 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
+# include <unistd.h>
+# include <fcntl.h>
 # include "mlx.h"
 # include "minirt_struct.h"
+# include "get_next_line.h"
+# include "libft.h"
 
 t_img_data      *create_img_data(int width, int height);
-void            mlx_show(t_img_data *data, char *title);
+// void            mlx_show(t_scene *scene, t_img_data *data, char *title);
+void            mlx_show(t_vars vars, t_mlx_data *img, t_img_data *data);
 void                *free_img_data(t_img_data *data);
 t_camera        *camera_locate(double aspect_ratio);
 void                free_camera(t_camera *cam);
 t_list          *hitlst_new(void);
-t_sphere        *init_sphere(t_vec *center, double radius, t_vec *color, t_vec *albedo);
+t_sphere        *init_sphere(t_vec *center, double radius, t_vec *color);
 //t_sphere        *init_sphere(t_vec *center, double diameter, t_vec *color);
 void            hitlst_add(t_list *lst, void *obj, int obj_type);
 void            free_hitlst(t_list *lst);
-void        mlx_show(t_img_data *data, char *title);
+// void        mlx_show(t_img_data *data, char *title);
 t_hittable      *hittable_create(void *obj, int obj_type);
 void			free_hittable(t_hittable *h);
 int         sphere_hit(void *s, t_ray *r, t_hit_record *rec);
@@ -68,7 +73,7 @@ int         hitlst_hit(t_list *lst, t_hit_record *rec);
 
 
 void			hit_set_normal(t_hit_record *record, t_ray *r);
-void				draw_hittable(t_camera *cam, t_list *lst, t_light *light);
+void				draw_hittable(t_scene *scene);
 void	color_map(void *mlx, void *win,int w,int h);
 
 t_vec       *ray_at(t_ray *ray, double t);
@@ -84,9 +89,20 @@ void        draw_sky(t_img_data *data, t_camera *cam);
 
 int             plane_hit(void *s, t_ray *r, t_hit_record *rec);
 t_plane         *init_plane(t_vec *p, t_vec *normal, t_vec *albedo);
-t_light         *init_light(t_vec *ori, double ratio, t_vec *color, t_ambient *A);
+t_light         *init_light(t_vec *ori, double ratio, t_vec *color);
 t_ambient       *init_ambient(double ratio, t_vec *color);
-t_camera        *init_cam(t_vec *lookfrom, t_vec *lookat, double aspect_ratio, double vfov);
+t_camera        *init_cam(t_scene *scene, t_vec *lookfrom, t_vec *lookat, double hfov);
+// t_camera        *init_cam(t_vec *lookfrom, t_vec *lookat, double aspect_ratio, double vfov);
 int			vec_is_parallel(t_vec *a, t_vec *b);
+t_scene        *parse(char *rt_file);
+int     parse_resolution(t_scene *scene, char *line);
+int     parse_ambient(t_scene *scene, char *line);
+int     parse_camera(t_scene *scene, char *line);
+int     parse_light(t_scene *scene, char *line);
+int     parse_plane(t_scene *scene, char *line);
+int     parse_sphere(t_scene *scene, char *line);
+t_list          *init_camlst();
+void            camlst_add(t_scene *scene, t_camera *cam);
+void        mlx_draw_by_img_data(t_mlx_data *mlx_data, t_img_data *img_data);
 
 #endif

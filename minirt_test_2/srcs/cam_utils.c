@@ -6,11 +6,66 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 22:26:06 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/15 09:44:55 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/16 12:47:11 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+t_list          *init_camlst()
+{
+    t_list      *result;
+
+    result = (t_list *)malloc(sizeof(t_list));
+    result->content = NULL;
+    result->next = NULL;
+    return (result);
+}
+
+void            camlst_add(t_scene *scene, t_camera *cam)
+{
+    t_list  *begin;
+    int     cnt;
+
+    cnt = scene->n_cam;
+    begin = scene->cam;
+    if (scene->cam->content)
+    {
+        while (cnt--)
+            scene->cam = scene->cam->next;
+        scene->cam->next = init_camlst();
+        scene->cam->next->content = cam;
+        scene->cam->next->next = begin;
+    }
+    else
+    {
+        scene->cam->content = cam;
+        scene->cam->next = scene->cam;
+    }
+    cam->data = create_img_data(scene->img->width, scene->img->height);
+    scene->cam = begin;
+}
+
+// void            camlst_add(t_list *lst, t_camera *cam)
+// {
+//     if (lst->content == NULL)
+//     {
+//         printf("1\n");
+//         // lst = init_camlst();
+//         lst->content = cam;
+//         lst->next = lst;
+//     }
+//     else 
+//     {
+//         printf("2\n");
+//         // while (lst->next)
+//         //     lst = lst->next;
+//         lst->next = init_camlst();
+//         lst->next->content = cam;
+//         lst->next->next = lst;
+//     }
+//     // lst->content = cam;
+// }
 
 void			set_camera_llc(t_camera *cam, t_vec *lookat)
 {
@@ -26,7 +81,7 @@ void			set_camera_llc(t_camera *cam, t_vec *lookat)
 	vec_mul_const_apply(cam->vertical, 2.0);
 }
 
-t_camera        *init_cam(t_vec *lookfrom, t_vec *lookat, double aspect_ratio, double hfov)
+t_camera        *init_cam(t_scene *scene, t_vec *lookfrom, t_vec *lookat, double hfov)
 {
     t_camera    *result;
     double      view_h;
@@ -42,7 +97,7 @@ t_camera        *init_cam(t_vec *lookfrom, t_vec *lookat, double aspect_ratio, d
 	}
     result = (t_camera *)malloc(sizeof(t_camera));
     view_w = 2 * tan(hfov / 2.0);
-    view_h = view_w / aspect_ratio;
+    view_h = view_w / (scene->img->width) * scene->img->height;
     result->horizontal = vec_unit(vec_cross(vup, lookat));
 	result->vertical = vec_mul_const_apply(
 							vec_cross(lookat, result->horizontal), view_h);
@@ -64,7 +119,6 @@ t_camera        *create_cam(double aspect_ratio)
     double      focal_length;
 
     result = (t_camera *)malloc(sizeof(t_camera));
-    result->aspect_ratio = aspect_ratio;
     focal_length = 1.0;
     viewport_height = 30.0;
     viewport_width = viewport_height * aspect_ratio;

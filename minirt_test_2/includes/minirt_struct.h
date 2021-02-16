@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:04:48 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/05 22:36:10 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/15 16:58:46 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # define PM 7
 # define CAM 11
 
+#include "libft.h"
+
 typedef struct      s_img_data
 {
     int             **img;
@@ -43,18 +45,11 @@ typedef struct      s_vec
 typedef struct      s_camera
 {
     t_img_data      *data;
-    double          aspect_ratio;
     t_vec           *origin;
     t_vec           *lower_left_corner;
     t_vec           *horizontal;
     t_vec           *vertical;
 }                   t_camera;
-
-typedef struct      s_list
-{
-    void            *content;
-    struct s_list   *next;
-}                   t_list;
 
 typedef struct      s_sphere
 {
@@ -159,5 +154,15 @@ typedef struct      s_ambient
     double           ratio;
     t_vec           *color;
 }                   t_ambient;
+
+typedef struct      s_scene
+{
+    t_img_data      *img;
+    t_list          *cam;
+    t_ambient       *ambient;
+    t_light         *light;
+    t_list          *obj;
+    int             n_cam;
+}                   t_scene;
 
 #endif

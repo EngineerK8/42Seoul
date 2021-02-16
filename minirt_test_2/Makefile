@@ -6,13 +6,14 @@
 #    By: hekang <hekang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/14 00:08:03 by hekang            #+#    #+#              #
-#    Updated: 2021/02/05 22:34:13 by hekang           ###   ########.fr        #
+#    Updated: 2021/02/16 11:52:44 by hekang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC		= img_utils.c main.c mlx_utils.c ray_utils.c vec_calc_apply.c vec_calc.c vec_create.c \
 		vec_calc_extra.c cal_utils.c cam_utils.c sky_utils.c sphere.c hitlst_utils.c hittable_utils.c \
-		draw_hittable.c hitlst_info_utils.c hit_record.c plane.c light.c ambient.c
+		draw_hittable.c hitlst_info_utils.c hit_record.c plane.c light.c ambient.c parse.c \
+		gnl/get_next_line.c parse_base.c parse_obj.c
 
 SRCDIR	= ./srcs/
 SRCS 	= $(addprefix $(SRCDIR), $(SRC))
@@ -27,7 +28,7 @@ MLXNAME = libmlx.dylib
 NAME	= minirt
 
 GCC 	= GCC
-GCCFLAG = -Wall -Werror -Wextra -g
+GCCFLAG = -Wall -Werror -Wextra -g -fsanitize=address
 RM 		= rm -f
 
 %.o:		%.c

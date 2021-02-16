@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atod.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/02 22:40:21 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/15 14:29:42 by hekang           ###   ########.fr       */
+/*   Created: 2021/02/15 14:13:35 by hekang            #+#    #+#             */
+/*   Updated: 2021/02/15 14:30:23 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <math.h>
 
-int	check_digit(const char *str)
+int	check_ddigit(const char *str)
 {
 	int	cnt;
 	int	i;
@@ -31,23 +32,22 @@ int	check_digit(const char *str)
 		cnt++;
 	}
 	while (str[cnt + i])
-	{
-		if (str[cnt + i] >= '0' && str[cnt + i] <= '9')
+		if (str[cnt + i] >= '0' && str[cnt + i] <= '9' && str[cnt + i] == '.')
 			i++;
 		else
 			break ;
-	}
 	return (i * minus);
 }
 
-int	ft_atoi(const char *str)
+double	ft_atod(const char *str)
 {
-	int					cnt;
-	unsigned long int	result;
-	int					minus;
+	int					    cnt;
+	double	result;
+	int					    minus;
+    int                     n;
 
-	if (check_digit(str) >= 20 || check_digit(str) <= -20)
-		return (check_digit(str) > 0 ? -1 : 0);
+	if (check_ddigit(str) >= 20 || check_ddigit(str) <= -20)
+		return (check_ddigit(str) > 0 ? -1 : 0);
 	cnt = 0;
 	minus = 1;
 	result = 0;
@@ -61,9 +61,10 @@ int	ft_atoi(const char *str)
 		cnt++;
 	}
 	while (str[cnt] >= '0' && str[cnt] <= '9')
-	{
-		result = result * 10 + str[cnt] - '0';
-		cnt++;
-	}
+		result = result * 10 + str[cnt++] - '0';
+    n = 1;
+    if (str[cnt++] >= '.')
+        while (str[cnt] >= '0' && str[cnt] <= '9')
+            result = result + (str[cnt++] - '0') * pow(0.1, n++);
 	return (result * minus);
 }
