@@ -6,15 +6,11 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 13:33:21 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/16 13:13:32 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/17 09:37:19 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-t_scene *g_scene;
-t_mlx_data *g_img;
-t_vars g_vars;
 
 void        mlx_draw_by_img_data(t_mlx_data *mlx_data, t_img_data *img_data)
 {

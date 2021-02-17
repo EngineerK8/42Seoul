@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 11:52:39 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/16 11:14:20 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/16 22:50:53 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ int     parse_camera(t_scene *scene, char *line)
     from = vec_create(ft_atoi(lookfrom[0]), ft_atoi(lookfrom[1]), ft_atoi(lookfrom[2]));
     printf("\nx : %f / y : %f / z : %f \n", from->x, from->y , from->z);
     printf("n_cam : %d \n", scene->n_cam);
-    normal = vec_create(ft_atoi(looknormal[0]), ft_atoi(looknormal[1]), ft_atoi(looknormal[2]));
-    camlst_add(scene, init_cam(scene, from, normal, ft_atoi(s[3]) * PI / 180.0));
+    normal = vec_create(ft_atod(looknormal[0]), ft_atod(looknormal[1]), ft_atod(looknormal[2]));
+    camlst_add(scene, init_cam(scene, from, normal, ft_atod(s[3]) * PI / 180.0));
     return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 22:26:06 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/16 12:47:11 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/16 13:38:58 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,9 @@ t_camera        *init_cam(t_scene *scene, t_vec *lookfrom, t_vec *lookat, double
 		vup = vec_create(1, 0, 0);
 	}
     result = (t_camera *)malloc(sizeof(t_camera));
+
+    result->normal = lookat;
+    result->fov = hfov;
     view_w = 2 * tan(hfov / 2.0);
     view_h = view_w / (scene->img->width) * scene->img->height;
     result->horizontal = vec_unit(vec_cross(vup, lookat));

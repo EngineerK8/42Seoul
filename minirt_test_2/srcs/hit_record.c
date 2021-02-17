@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 15:26:12 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/02 17:03:07 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/17 16:24:17 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_hit_record        *hit_record_new(void)
     result->p = NULL;
 	result->t_min = HIT_T_MIN;
 	result->t_max = INFINITY;
+	result->color = NULL;
     return (result);
 }
 

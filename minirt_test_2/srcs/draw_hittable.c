@@ -6,63 +6,92 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 17:18:41 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/16 11:54:41 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/17 22:57:08 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int                 cal_hittable_color(t_scene *scene, t_hit_record *rec)
+/*
+    I = kd * Ll * cos = kd * Ll * N dot L
+*/
+t_vec               *diffuse_color(t_scene *scene, t_hit_record *rec)
 {
     t_vec           *color;
-    t_vec           *tmp;
-    int             result;
-    double          t;
+    double          kd;
+    t_vec           *L;
+    t_vec           *N;
 
-    color = NULL;
+    kd = 1;
+    L = vec_unit(vec_sub(rec->p, scene->light->origin));
+    N = rec->normal;
+    color = vec_mul_const(scene->light->color, 
+        vec_dot(L, N) * scene->light->ratio * kd);
+    return (clamp_vec(color, 0, 255));
+}
+
+t_vec               *specular_color(t_scene *scene, t_hit_record *rec)
+{
+    t_vec           *color;
+    double          ks;
+    t_vec           *R;
+    t_vec           *V;
+    t_vec           *L;
+    t_vec           *L_rev;
+    double          reflection;
+
+    ks = 1;
+    // printf("ray->orig: %f\n", rec->ray->orig->x);
+    // V = vec_unit(vec_sub(scene->light->origin, rec->p));
+    V = vec_unit(vec_sub(rec->p, rec->ray->orig));
+    L_rev = vec_unit(vec_sub(rec->p, scene->light->origin));
+    L = vec_unit(vec_sub(scene->light->origin, rec->p));
+    R = vec_add(L, vec_mul_const(rec->normal, clamp((2 * vec_dot(L_rev, rec->normal)), 0, INFINITY)));
+    reflection = pow(vec_dot(V, R), 100);
+    color = vec_mul_const(scene->light->color, reflection);
+    // color = vec_mul_const(color, 10);
+    // if (color->x > 1)
+    //     printf("specular clamp_vec : %f %f %f\n", clamp_vec(color, 0, 255)->x, clamp_vec(color, 0, 255)->y, clamp_vec(color, 0, 255)->z);
+    return (clamp_vec(color, 0, 255));
+}
+
+int                 cal_hittable_color(t_scene *scene, t_hit_record *rec)
+{
+    t_vec           *ambient;
+    int             result;
+    t_vec           *diffuse; 
+    t_vec           *specular;
+
     result = 0;
     if (hitlst_hit(scene->obj, rec))
     {
-        // color = vec_add_apply(vec_create(1, 1, 1), info->rec->normal);
-        // printf("22222222222\n");
-        // printf("%f\n", rec->normal->z);
-        // color = vec_create(0.6, 0, info->rec->normal->z / 3 );
-        // color = vec_unit(rec->normal);
-        // color = vec_create(0, 0, color->z - 0.3);
-        tmp = vec_sub(rec->p, scene->light->origin);
-        tmp = vec_unit(tmp);
-        t = vec_dot(tmp, rec->normal);
-
-        color = vec_create(rec->color->x, rec->color->y, rec->color->z);
-        // tmp =vec_mul_const(color, t);
-
-        // tmp = vec_add(tmp,vec_mul_const(light->color, light->ratio));
-
-        tmp = vec_mul_const(scene->light->color, scene->light->ratio * t);
-        tmp = vec_add(color, tmp);
-
-        // color =vec_mul_const(color, t * light->ratio);
-        color = vec_add(tmp, vec_mul_const(scene->ambient->color, scene->ambient->ratio));
-
-
+        // tmp = vec_sub(rec->p, scene->light->origin); 
+        // tmp = vec_unit(tmp); // light normal vec
+        // t = vec_dot(tmp, rec->normal); // cos(theta)
         // color = vec_create(rec->color->x, rec->color->y, rec->color->z);
-        // color = vec_mul_const(color, rec->t_max * light->ratio);
-        // printf("t : %f \n", t);
-        // printf("t_max : %f \n", rec->t_max);
-        result = get_color(color);
-        free(color);
-    }
-    // else
-    // {
-    //     tmp = vec_unit(rec->ray->dir);
-    //     t = 0.5 * (tmp->y + 1.0);
-    //     free(tmp);
-    //     color = vec_mul_const_apply(vec_create(1, 1, 1), 1.0 - t);
-    //     tmp = vec_mul_const_apply(vec_create(0.5, 0.7, 1), t);
-    //     vec_add_apply(color, tmp);
-    //     free(tmp);
-    // }
+        // tmp = vec_mul_const(scene->light->color, scene->light->ratio * t * kd);
+        // tmp = vec_add(color, tmp);
+        //diffuse light
 
+            // return (get_color(vec_create(0, 0, 0)));
+        diffuse = diffuse_color(scene, rec);
+        specular = specular_color(scene, rec);
+        // specular = vec_create(0, 0, 0);
+        ambient = vec_add(rec->color, vec_mul_const(scene->ambient->color, scene->ambient->ratio));
+        //주변광
+        if (in_shadow(scene, rec))
+        {
+            // printf("in shadow\n");
+            return(get_color(vec_mul_const(ambient, 0.3)));
+        }
+
+        result = get_color(vec_add(vec_add(diffuse, specular), ambient));
+
+        
+        // free(diffuse);
+        // free(specular);
+        // free(ambient);
+    }
     return (result);
 }
 
@@ -81,7 +110,6 @@ t_ray               *camera_get_ray(t_camera *cam, double u, double v)
     return (create_ray(cam->origin, tmp));
 }
 
-// void                draw_hittable(t_camera *cam, t_list *lst, t_light *light)
 void                draw_hittable(t_scene *scene)
 {
     int             x;
@@ -94,7 +122,6 @@ void                draw_hittable(t_scene *scene)
     y = scene->img->height;
     while (n < scene->n_cam)
     {
-        printf("11111\n");
         while ((--y) >= 0)
         {
             x = -1;
@@ -109,21 +136,7 @@ void                draw_hittable(t_scene *scene)
                 free_hit_record(rec);
             }
         }
-        printf("222\n");
-        if (scene->cam->next)
-        {
-            printf("333\n");
-            scene->cam = scene->cam->next;
-            // ((t_camera *)(scene->cam->content))->data = scene->img;
-        }
-            printf("444\n");
-            printf("content : %p\n",((t_camera *)(scene->cam->content)) );
-            printf("x : %f\n", ((t_camera *)(scene->cam->content))->origin->x);
-            printf("y : %f\n", ((t_camera *)(scene->cam->content))->origin->y);
-            printf("z : %f\n", ((t_camera *)(scene->cam->content))->origin->z);
-            // printf("00 : %d\n", ((t_camera *)(scene->cam->content))->data->img[0][0]);
-            // printf("11 : %d\n", ((t_camera *)(scene->cam->content))->data->img[1][1]);
-            
+        scene->cam = scene->cam->next;
         y = scene->img->height;
         n++;
     }

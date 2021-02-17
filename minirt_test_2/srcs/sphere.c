@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 11:15:49 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/15 15:20:59 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/17 18:30:33 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,16 @@ t_sphere        *init_sphere(t_vec *center, double radius, t_vec *color)
 // 	return (FALSE);
 // }
 
-void		get_sphere_uv(t_hit_record *rec)
-{
-	double	theta;
-	double	phi;
+// void		get_sphere_uv(t_hit_record *rec)
+// {
+// 	double	theta;
+// 	double	phi;
 
-	theta = acos(-(rec->normal->y));
-	phi = atan2(-(rec->normal->z), rec->normal->x) + M_PI;
-	rec->u = phi / (2 * M_PI);
-	rec->v = theta / M_PI;
-}
+// 	theta = acos(-(rec->normal->y));
+// 	phi = atan2(-(rec->normal->z), rec->normal->x) + M_PI;
+// 	// rec->u = phi / (2 * M_PI);
+// 	// rec->v = theta / M_PI;
+// }
 
 void	set_face_normal(t_ray *r, t_hit_record *rec)
 {
@@ -83,7 +83,7 @@ int         sphere_hit(void *obj, t_ray *r, t_hit_record *rec)
     s.root = (-s.half_b + s.sqrtd) / s.a;
   	if (s.root < rec->t_min || s.root > rec->t_max)
 	{
-		s.root = (-s.half_b + s.sqrtd) / s.a;
+		s.root = (-s.half_b - s.sqrtd) / s.a;
 		if (s.root < rec->t_min || s.root > rec->t_max)
 			return (FALSE);
 	}
@@ -91,12 +91,11 @@ int         sphere_hit(void *obj, t_ray *r, t_hit_record *rec)
     // printf("color x: %f\n", sp->color->x );
     // printf("color y: %f\n", sp->color->y );
     // printf("color z: %f\n", sp->color->z );
-    
     rec->t = s.root;
     rec->p = ray_at(r, s.root);
     rec->color = sp->color;
     rec->normal = vec_div_const(vec_sub(rec->p, sp->center), sp->radius);
-	get_sphere_uv(rec);
+	// get_sphere_uv(rec);
 	set_face_normal(r, rec);
     return (TRUE);
     // if (discriminant < 0)

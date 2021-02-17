@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:04:48 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/15 16:58:46 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/17 16:24:30 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef struct      s_camera
     t_vec           *lower_left_corner;
     t_vec           *horizontal;
     t_vec           *vertical;
+    t_vec           *normal;
+    double          fov;
 }                   t_camera;
 
 typedef struct      s_sphere
@@ -56,7 +58,6 @@ typedef struct      s_sphere
     t_vec           *center;
     double          radius;
     t_vec           *color;
-    t_vec           *albedo;
 }                   t_sphere;
 
 typedef struct		s_sp_set
@@ -101,8 +102,6 @@ typedef struct          s_hit_record
     double              t_min;
     double              t_max;
     double              t;
-    double              u;
-    double              v;
     int                 is_front_face;
 }                       t_hit_record;
 
@@ -164,5 +163,30 @@ typedef struct      s_scene
     t_list          *obj;
     int             n_cam;
 }                   t_scene;
+
+typedef struct      s_triangle
+{
+    t_vec           *p0;
+    t_vec           *p1;
+    t_vec           *p2;
+    t_vec           *color;
+}                   t_triangle;
+
+typedef struct      s_square
+{
+    t_vec           *origin;
+    t_vec           *normal;
+    double          size;
+    t_vec           *color;
+}                   t_square;
+
+typedef struct      s_cylinder
+{
+    t_vec           *origin;
+    t_vec           *normal;
+    double          diameter;
+    double          height;
+    t_vec           *color;
+}                   t_cylinder;
 
 #endif

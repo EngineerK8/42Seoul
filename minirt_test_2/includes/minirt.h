@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:00:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/16 13:13:36 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/17 17:47:53 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 # define PI 3.14159265358917932385
 # define OBJ_SPHERE 1
 # define OBJ_PLANE 2
+# define OBJ_TRIANGLE 3
+# define OBJ_SQUARE 4
+# define OBJ_CYLINDER 5
 # define ANTI_SAMPLES 50
 # define REFLECT_DEPTH 5
 # define X_KEY_PRESS 2
@@ -62,6 +65,7 @@ t_vec		*vec_mul_const(t_vec *a, double c);
 t_vec		*vec_div_const(t_vec *a, double c);
 t_vec		*vec_reflect(t_vec *v, t_vec *n);
 double      vec_dot(t_vec *u, t_vec *v);
+double      vec_len(t_vec *u);
 double      vec_len_sqrt(t_vec *u);
 t_vec       *vec_cross(t_vec *u, t_vec *v);
 t_vec       *vec_unit(t_vec *u);
@@ -101,8 +105,18 @@ int     parse_camera(t_scene *scene, char *line);
 int     parse_light(t_scene *scene, char *line);
 int     parse_plane(t_scene *scene, char *line);
 int     parse_sphere(t_scene *scene, char *line);
+int     parse_triangle(t_scene *scene, char *line);
+int     parse_square(t_scene *scene, char *line);
+int     parse_cylinder(t_scene *scene, char *line);
+
+
 t_list          *init_camlst();
 void            camlst_add(t_scene *scene, t_camera *cam);
 void        mlx_draw_by_img_data(t_mlx_data *mlx_data, t_img_data *img_data);
-
+t_ray               *camera_get_ray(t_camera *cam, double u, double v);
+int                 cal_hittable_color(t_scene *scene, t_hit_record *rec);
+int         triangle_hit(void *obj, t_ray *r, t_hit_record *rec);
+void	set_face_normal(t_ray *r, t_hit_record *rec);
+t_vec 	*clamp_vec(t_vec *vec, double min, double max);
+int     in_shadow(t_scene *scene, t_hit_record *rec);
 #endif
