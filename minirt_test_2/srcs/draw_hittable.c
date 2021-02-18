@@ -73,6 +73,13 @@ int                 cal_hittable_color(t_scene *scene, t_hit_record *rec)
         // tmp = vec_add(color, tmp);
         //diffuse light
 
+        // if (in_shadow(scene, rec))
+        // {
+        //     // printf("in shadow\n");
+        //     rec->color = vec_create(0,0,0);
+        //     // return(get_color(vec_mul_const(ambient, 0.3)));
+        // }
+
             // return (get_color(vec_create(0, 0, 0)));
         diffuse = diffuse_color(scene, rec);
         specular = specular_color(scene, rec);
@@ -81,8 +88,7 @@ int                 cal_hittable_color(t_scene *scene, t_hit_record *rec)
         //주변광
         if (in_shadow(scene, rec))
         {
-            // printf("in shadow\n");
-            return(get_color(vec_mul_const(ambient, 0.3)));
+            return(get_color(vec_mul_const(ambient, scene->ambient->ratio)));
         }
 
         result = get_color(vec_add(vec_add(diffuse, specular), ambient));

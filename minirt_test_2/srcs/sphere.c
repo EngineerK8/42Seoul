@@ -48,17 +48,6 @@ t_sphere        *init_sphere(t_vec *center, double radius, t_vec *color)
 // 	return (FALSE);
 // }
 
-// void		get_sphere_uv(t_hit_record *rec)
-// {
-// 	double	theta;
-// 	double	phi;
-
-// 	theta = acos(-(rec->normal->y));
-// 	phi = atan2(-(rec->normal->z), rec->normal->x) + M_PI;
-// 	// rec->u = phi / (2 * M_PI);
-// 	// rec->v = theta / M_PI;
-// }
-
 void	set_face_normal(t_ray *r, t_hit_record *rec)
 {
 	rec->is_front_face = vec_dot(r->dir, rec->normal) < 0;
@@ -87,6 +76,10 @@ int         sphere_hit(void *obj, t_ray *r, t_hit_record *rec)
 		if (s.root < rec->t_min || s.root > rec->t_max)
 			return (FALSE);
 	}
+    if ((-s.half_b + s.sqrtd) < rec->t_min || (-s.half_b - s.sqrtd) < rec->t_min)
+        return (FALSE);
+    // 그림자 계산 . 자신과 겹쳤을때
+    
     // printf("radius: %f\n", sp->radius );
     // printf("color x: %f\n", sp->color->x );
     // printf("color y: %f\n", sp->color->y );
@@ -94,8 +87,8 @@ int         sphere_hit(void *obj, t_ray *r, t_hit_record *rec)
     rec->t = s.root;
     rec->p = ray_at(r, s.root);
     rec->color = sp->color;
-    rec->normal = vec_div_const(vec_sub(rec->p, sp->center), sp->radius);
-	// get_sphere_uv(rec);
+    rec->normal = vec_unit(vec_sub(rec->p, sp->center));
+    // rec->normal = vec_div_const(vec_sub(rec->p, sp->center), sp->radius);
 	set_face_normal(r, rec);
     return (TRUE);
     // if (discriminant < 0)

@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 15:11:19 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/16 14:49:33 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/18 11:05:37 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ int     parse_square(t_scene *scene, char *line)
     tmp = ft_split(s[4], ',');
     sq->color = vec_create(ft_atoi(tmp[0]), ft_atoi(tmp[1]), ft_atoi(tmp[2]));
     hitlst_add(scene->obj, (void *)sq, OBJ_SQUARE);
+    printf("square\n\n");
+    printf("p0 = %f %f %f \n", sq->origin->x, sq->origin->y, sq->origin->z);
     return (1);
 }
 

@@ -28,8 +28,6 @@ int     in_shadow(t_scene *scene, t_hit_record *rec)
     rec->ray = light_ray;
     // printf("light_ray_ori : %f %f %f \n", light_ray->orig->x,light_ray->orig->y, light_ray->orig->z );
     // printf("rec->p : %f %f %f \n", rec->p->x,rec->p->y, rec->p->z );
-    // printf(">>>light_ray_dir : %f %f %f \n", light_ray->dir->x,light_ray->dir->y, light_ray->dir->z );
-    // printf("light_length : %f \n", light_length);
     if (hitlst_hit(scene->obj, rec))
         return (TRUE);
     return (FALSE);

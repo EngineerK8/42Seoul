@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:04:48 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/17 16:24:30 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/18 10:55:22 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,8 @@ typedef struct      s_square
     t_vec           *normal;
     double          size;
     t_vec           *color;
+    t_vec           *p1;
+    t_vec           *p2;
 }                   t_square;
 
 typedef struct      s_cylinder

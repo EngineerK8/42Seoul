@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:00:32 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/17 17:47:53 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/18 11:03:13 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,4 +119,6 @@ int         triangle_hit(void *obj, t_ray *r, t_hit_record *rec);
 void	set_face_normal(t_ray *r, t_hit_record *rec);
 t_vec 	*clamp_vec(t_vec *vec, double min, double max);
 int     in_shadow(t_scene *scene, t_hit_record *rec);
+int             square_hit(void *obj, t_ray *r, t_hit_record *rec);
+
 #endif
