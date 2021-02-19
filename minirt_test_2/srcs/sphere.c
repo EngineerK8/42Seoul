@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 11:15:49 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/17 18:30:33 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/19 10:50:38 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ int         sphere_hit(void *obj, t_ray *r, t_hit_record *rec)
 		if (s.root < rec->t_min || s.root > rec->t_max)
 			return (FALSE);
 	}
-    if ((-s.half_b + s.sqrtd) < rec->t_min || (-s.half_b - s.sqrtd) < rec->t_min)
+    if ((-s.half_b + s.sqrtd) < rec->t_min 
+        || (-s.half_b - s.sqrtd) < rec->t_min)
         return (FALSE);
     // 그림자 계산 . 자신과 겹쳤을때
     

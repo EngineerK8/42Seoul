@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 22:04:48 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/18 10:55:22 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/19 10:42:56 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,5 +190,15 @@ typedef struct      s_cylinder
     double          height;
     t_vec           *color;
 }                   t_cylinder;
+
+typedef struct      s_cy_set
+{
+    double          a;
+    double          b;
+    double          c;
+    double          discriminant;
+    double          root;
+    t_vec           *cp;
+}                   t_cy_set;
 
 #endif

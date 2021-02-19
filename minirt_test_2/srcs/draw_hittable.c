@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 17:18:41 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/17 22:57:08 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/19 15:02:14 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int                 cal_hittable_color(t_scene *scene, t_hit_record *rec)
         specular = specular_color(scene, rec);
         // specular = vec_create(0, 0, 0);
         ambient = vec_add(rec->color, vec_mul_const(scene->ambient->color, scene->ambient->ratio));
-        //주변광
+        // 주변광
         if (in_shadow(scene, rec))
         {
             return(get_color(vec_mul_const(ambient, scene->ambient->ratio)));

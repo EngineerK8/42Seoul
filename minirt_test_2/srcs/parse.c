@@ -6,7 +6,7 @@
 /*   By: hekang <hekang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 10:00:21 by hekang            #+#    #+#             */
-/*   Updated: 2021/02/18 11:01:36 by hekang           ###   ########.fr       */
+/*   Updated: 2021/02/19 09:17:54 by hekang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int         parse_obj(t_scene *scene, char *line)
         parse_sphere(scene, line);
     else if (ft_strnstr(line, "sq ", 3))
         parse_square(scene, line);
-    // else if (ft_strnstr(line, "cy ", 3))
-    //     parse_cylinder(scene, line);
+    else if (ft_strnstr(line, "cy ", 3))
+        parse_cylinder(scene, line);
     else if (ft_strnstr(line, "tr ", 3))
         parse_triangle(scene, line);
     else
